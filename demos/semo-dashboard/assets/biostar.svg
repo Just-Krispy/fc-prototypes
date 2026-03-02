@@ -1,0 +1,45 @@
+<svg width="60" height="70" viewBox="0 0 60 70" xmlns="http://www.w3.org/2000/svg">
+  <!-- Official Farm Credit BioStar Symbol -->
+  <!-- Four white leaves in cross pattern -->
+  
+  <!-- Top leaf -->
+  <path d="M30 2 C25 8, 22 16, 22 22 C22 28, 26 30, 30 30 C34 30, 38 28, 38 22 C38 16, 35 8, 30 2Z" fill="white"/>
+  
+  <!-- Left leaf -->
+  <path d="M2 32 C8 27, 16 24, 22 24 C28 24, 30 28, 30 32 C30 36, 28 40, 22 40 C16 40, 8 37, 2 32Z" fill="white"/>
+  
+  <!-- Right leaf -->
+  <path d="M58 32 C52 27, 44 24, 38 24 C32 24, 30 28, 30 32 C30 36, 32 40, 38 40 C44 40, 52 37, 58 32Z" fill="white"/>
+  
+  <!-- Green star rays radiating from center (connecting leaves) -->
+  <!-- Top-left ray -->
+  <path d="M30 30 L18 18" stroke="#5B8F22" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Top-right ray -->
+  <path d="M30 30 L42 18" stroke="#5B8F22" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Left ray -->
+  <path d="M30 30 L14 30" stroke="#5B8F22" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Right ray -->
+  <path d="M30 30 L46 30" stroke="#5B8F22" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Bottom-left ray -->
+  <path d="M30 30 L20 40" stroke="#5B8F22" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Bottom-right ray -->
+  <path d="M30 30 L40 40" stroke="#5B8F22" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Top ray -->
+  <path d="M30 30 L30 14" stroke="#5B8F22" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Center star point -->
+  <circle cx="30" cy="30" r="3" fill="#5B8F22"/>
+  
+  <!-- Root system (bottom leaf - striped white/green horizontal lines like ladder) -->
+  <path d="M30 40 C25 42, 22 46, 22 50 C22 56, 26 62, 30 66 C34 62, 38 56, 38 50 C38 46, 35 42, 30 40Z" fill="white"/>
+  <!-- Horizontal stripe lines through root -->
+  <line x1="23" y1="46" x2="37" y2="46" stroke="#5B8F22" stroke-width="1.5"/>
+  <line x1="23.5" y1="49" x2="36.5" y2="49" stroke="#5B8F22" stroke-width="1.5"/>
+  <line x1="24.5" y1="52" x2="35.5" y2="52" stroke="#5B8F22" stroke-width="1.5"/>
+  <line x1="25.5" y1="55" x2="34.5" y2="55" stroke="#5B8F22" stroke-width="1.5"/>
+  <line x1="27" y1="58" x2="33" y2="58" stroke="#5B8F22" stroke-width="1.5"/>
+  <line x1="28" y1="61" x2="32" y2="61" stroke="#5B8F22" stroke-width="1.2"/>
+  
+  <!-- ® symbol -->
+  <text x="46" y="66" font-family="Arial,sans-serif" font-size="7" fill="white" opacity="0.8">®</text>
+</svg>
