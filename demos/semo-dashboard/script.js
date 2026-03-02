@@ -2,6 +2,36 @@
 (function () {
     'use strict';
 
+    // ====== Dark/Light Mode Toggle ======
+    function initTheme() {
+        var saved = localStorage.getItem('semo-theme');
+        if (saved) {
+            document.documentElement.setAttribute('data-theme', saved);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+
+        var toggle = document.getElementById('theme-toggle');
+        if (toggle) {
+            toggle.addEventListener('click', function () {
+                var current = document.documentElement.getAttribute('data-theme');
+                var next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('semo-theme', next);
+                toggle.setAttribute('aria-label', next === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+            });
+        }
+
+        // Listen for OS theme changes
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+                if (!localStorage.getItem('semo-theme')) {
+                    document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+                }
+            });
+        }
+    }
+
     // Set greeting based on time of day
     function setGreeting() {
         var hour = new Date().getHours();
@@ -73,7 +103,7 @@
             var low = day.mintempF;
             var dayDesc = day.hourly[4].weatherDesc[0].value;
 
-            html += '<div class="forecast-day">';
+            html += '<div class="forecast-day" role="group" aria-label="' + dayName + ' forecast">';
             html += '<div class="forecast-day-name">' + dayName + '</div>';
             html += '<div class="forecast-day-temp">' + high + '\u00B0/' + low + '\u00B0</div>';
             html += '<div class="forecast-day-desc">' + dayDesc + '</div>';
@@ -126,7 +156,7 @@
         if (alerts.length > 0) {
             var html = '';
             for (var j = 0; j < alerts.length; j++) {
-                html += '<div class="weather-alert">' + alerts[j] + '</div>';
+                html += '<div class="weather-alert" role="alert">' + alerts[j] + '</div>';
             }
             alertsEl.innerHTML = html;
         }
@@ -134,10 +164,11 @@
 
     function renderWeatherFallback() {
         document.getElementById('weather-loading').innerHTML =
-            '<div style="color:#999;font-size:13px;">Weather data temporarily unavailable.<br>Check <a href="https://wttr.in/Cape_Girardeau_MO" target="_blank" style="color:#5B8F22;">wttr.in</a> directly.</div>';
+            '<div style="color:var(--text-muted, #999);font-size:13px;">Weather data temporarily unavailable.<br>Check <a href="https://wttr.in/Cape_Girardeau_MO" target="_blank" rel="noopener noreferrer" style="color:var(--weather-fallback-link, #5B8F22);">wttr.in</a> directly.</div>';
     }
 
     // Init
+    initTheme();
     setGreeting();
     setDate();
     fetchWeather();

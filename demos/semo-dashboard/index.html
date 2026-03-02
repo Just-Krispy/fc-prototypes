@@ -7,17 +7,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=6">
+    <link rel="stylesheet" href="styles.css?v=7">
 </head>
 <body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <div class="dashboard">
         <!-- Header -->
-        <header class="header">
+        <header class="header" role="banner">
             <div class="header-content">
                 <div class="header-left">
                     <div class="logo-area">
                         <div class="logo-icon">
-                            <img src="assets/biostar.png" alt="Farm Credit BioStar" width="64" height="64">
+                            <img src="assets/biostar.png" alt="Farm Credit BioStar logo" width="64" height="64">
                         </div>
                         <div class="logo-text">
                             <span class="logo-title">Farm Credit</span>
@@ -27,210 +30,220 @@
                 </div>
                 <div class="header-center">
                     <h1 class="greeting" id="greeting">Good Morning, Greg</h1>
-                    <p class="date" id="current-date"></p>
+                    <p class="date" id="current-date" aria-live="polite"></p>
                 </div>
                 <div class="header-right">
-                    <span class="badge">Executive Dashboard</span>
+                    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark/light mode">
+                        <svg class="theme-icon sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                        <svg class="theme-icon moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    </button>
+                    <span class="badge" aria-label="Executive Dashboard">Executive Dashboard</span>
                 </div>
             </div>
         </header>
 
-        <!-- Key Metrics -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-label">Total Loans</div>
-                <div class="stat-value">$847M</div>
-                <div class="stat-change up">+3.2% YoY</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Active Borrowers</div>
-                <div class="stat-value">1,247</div>
-                <div class="stat-change up">+28 this quarter</div>
-            </div>
-            <div class="stat-card highlight">
-                <div class="stat-label">YTD Patronage Projection</div>
-                <div class="stat-value">$9.8M</div>
-                <div class="stat-change up">Up from $9.1M record</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Pending Applications</div>
-                <div class="stat-value">23</div>
-                <div class="stat-change neutral">$12.4M total value</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Avg Interest Rate</div>
-                <div class="stat-value">5.85%</div>
-                <div class="stat-change neutral">Stable</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Member Satisfaction</div>
-                <div class="stat-value">94%</div>
-                <div class="stat-change up">+2pts vs Q4</div>
-            </div>
-        </div>
+        <!-- Main Content -->
+        <main id="main-content" role="main">
+            <!-- Key Metrics -->
+            <section aria-label="Key metrics">
+                <h2 class="sr-only">Key Metrics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card" role="region" aria-label="Total Loans">
+                        <div class="stat-label">Total Loans</div>
+                        <div class="stat-value">$847M</div>
+                        <div class="stat-change up" aria-label="Up 3.2 percent year over year">+3.2% YoY</div>
+                    </div>
+                    <div class="stat-card" role="region" aria-label="Active Borrowers">
+                        <div class="stat-label">Active Borrowers</div>
+                        <div class="stat-value">1,247</div>
+                        <div class="stat-change up" aria-label="Plus 28 this quarter">+28 this quarter</div>
+                    </div>
+                    <div class="stat-card highlight" role="region" aria-label="Year to date patronage projection">
+                        <div class="stat-label">YTD Patronage Projection</div>
+                        <div class="stat-value">$9.8M</div>
+                        <div class="stat-change up" aria-label="Up from 9.1 million record">Up from $9.1M record</div>
+                    </div>
+                    <div class="stat-card" role="region" aria-label="Pending Applications">
+                        <div class="stat-label">Pending Applications</div>
+                        <div class="stat-value">23</div>
+                        <div class="stat-change neutral" aria-label="12.4 million total value">$12.4M total value</div>
+                    </div>
+                    <div class="stat-card" role="region" aria-label="Average Interest Rate">
+                        <div class="stat-label">Avg Interest Rate</div>
+                        <div class="stat-value">5.85%</div>
+                        <div class="stat-change neutral">Stable</div>
+                    </div>
+                    <div class="stat-card" role="region" aria-label="Member Satisfaction">
+                        <div class="stat-label">Member Satisfaction</div>
+                        <div class="stat-value">94%</div>
+                        <div class="stat-change up" aria-label="Up 2 points versus Q4">+2pts vs Q4</div>
+                    </div>
+                </div>
+            </section>
 
-        <!-- Market + Weather Row -->
-        <div class="two-col">
-            <!-- Market Snapshot -->
-            <div class="section">
-                <div class="section-header">
-                    <h2>Market Snapshot</h2>
-                </div>
-                <table class="market-table">
-                    <thead>
-                        <tr>
-                            <th>Commodity</th>
-                            <th>Price</th>
-                            <th>Change</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Corn</strong></td>
-                            <td>$4.85/bu</td>
-                            <td class="stat-change up">+2.3%</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Soybeans</strong></td>
-                            <td>$11.20/bu</td>
-                            <td class="stat-change down">-0.8%</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Cotton</strong></td>
-                            <td>$0.72/lb</td>
-                            <td class="stat-change up">+1.1%</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Rice</strong></td>
-                            <td>$14.50/cwt</td>
-                            <td class="stat-change up">+0.5%</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="rate-row">
-                    <span>Prime Rate</span>
-                    <strong>8.50%</strong>
-                    <span class="stat-change neutral">unchanged</span>
-                </div>
-            </div>
+            <!-- Market + Weather Row -->
+            <div class="two-col">
+                <!-- Market Snapshot -->
+                <section class="section" aria-label="Market snapshot">
+                    <div class="section-header">
+                        <h2>Market Snapshot</h2>
+                    </div>
+                    <table class="market-table" aria-label="Commodity prices">
+                        <thead>
+                            <tr>
+                                <th scope="col">Commodity</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Change</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Corn</strong></td>
+                                <td>$4.85/bu</td>
+                                <td class="stat-change up" aria-label="Up 2.3 percent">+2.3%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Soybeans</strong></td>
+                                <td>$11.20/bu</td>
+                                <td class="stat-change down" aria-label="Down 0.8 percent">-0.8%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cotton</strong></td>
+                                <td>$0.72/lb</td>
+                                <td class="stat-change up" aria-label="Up 1.1 percent">+1.1%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Rice</strong></td>
+                                <td>$14.50/cwt</td>
+                                <td class="stat-change up" aria-label="Up 0.5 percent">+0.5%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="rate-row" role="region" aria-label="Prime Rate">
+                        <span>Prime Rate</span>
+                        <strong>8.50%</strong>
+                        <span class="stat-change neutral">unchanged</span>
+                    </div>
+                </section>
 
-            <!-- Weather -->
-            <div class="section">
-                <div class="section-header">
-                    <h2>SEMO Weather</h2>
-                </div>
-                <div id="weather-loading" class="weather-loading">Loading weather data...</div>
-                <div id="weather-content" class="weather-content" style="display:none;">
-                    <div class="weather-current">
-                        <div class="weather-temp" id="weather-temp"></div>
-                        <div class="weather-desc" id="weather-desc"></div>
-                        <div class="weather-location">Cape Girardeau, MO</div>
+                <!-- Weather -->
+                <section class="section" aria-label="SEMO Weather">
+                    <div class="section-header">
+                        <h2>SEMO Weather</h2>
                     </div>
-                    <div class="weather-details">
-                        <div class="weather-detail">
-                            <span class="weather-detail-label">Humidity</span>
-                            <span class="weather-detail-value" id="weather-humidity"></span>
+                    <div id="weather-loading" class="weather-loading" aria-live="polite" role="status">Loading weather data...</div>
+                    <div id="weather-content" class="weather-content" style="display:none;" aria-live="polite">
+                        <div class="weather-current">
+                            <div class="weather-temp" id="weather-temp"></div>
+                            <div class="weather-desc" id="weather-desc"></div>
+                            <div class="weather-location">Cape Girardeau, MO</div>
                         </div>
-                        <div class="weather-detail">
-                            <span class="weather-detail-label">Wind</span>
-                            <span class="weather-detail-value" id="weather-wind"></span>
+                        <div class="weather-details" role="group" aria-label="Weather details">
+                            <div class="weather-detail">
+                                <span class="weather-detail-label">Humidity</span>
+                                <span class="weather-detail-value" id="weather-humidity"></span>
+                            </div>
+                            <div class="weather-detail">
+                                <span class="weather-detail-label">Wind</span>
+                                <span class="weather-detail-value" id="weather-wind"></span>
+                            </div>
+                            <div class="weather-detail">
+                                <span class="weather-detail-label">Precip</span>
+                                <span class="weather-detail-value" id="weather-precip"></span>
+                            </div>
                         </div>
-                        <div class="weather-detail">
-                            <span class="weather-detail-label">Precip</span>
-                            <span class="weather-detail-value" id="weather-precip"></span>
-                        </div>
+                        <div class="forecast" id="forecast" role="group" aria-label="3-day forecast"></div>
+                        <div class="weather-alerts" id="weather-alerts" aria-live="assertive" role="alert"></div>
                     </div>
-                    <div class="forecast" id="forecast"></div>
-                    <div class="weather-alerts" id="weather-alerts"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Priorities + Weekly Stats Row -->
-        <div class="two-col">
-            <!-- Daily Priorities -->
-            <div class="section">
-                <div class="section-header">
-                    <h2>Today's Priorities</h2>
-                </div>
-                <div class="priorities">
-                    <div class="action-item">
-                        <div class="action-dot high"></div>
-                        <div>
-                            <div class="action-title">Review AgSunrise applications</div>
-                            <div class="action-detail">5 pending approvals ($3.2M total)</div>
-                        </div>
-                    </div>
-                    <div class="action-item">
-                        <div class="action-dot medium"></div>
-                        <div>
-                            <div class="action-title">Board meeting prep materials</div>
-                            <div class="action-detail">Deck finalized, ready for review</div>
-                        </div>
-                    </div>
-                    <div class="action-item">
-                        <div class="action-dot medium"></div>
-                        <div>
-                            <div class="action-title">Q1 patronage calculations</div>
-                            <div class="action-detail">Due Friday - finance team on track</div>
-                        </div>
-                    </div>
-                    <div class="action-item">
-                        <div class="action-dot low"></div>
-                        <div>
-                            <div class="action-title">Young farmer program outreach</div>
-                            <div class="action-detail">3 new applications this week</div>
-                        </div>
-                    </div>
-                </div>
+                </section>
             </div>
 
-            <!-- Quick Stats -->
-            <div class="section">
-                <div class="section-header">
-                    <h2>This Week</h2>
-                </div>
-                <div class="quick-stats">
-                    <div class="stat-row">
-                        <span class="stat-row-label">Applications</span>
-                        <div class="stat-bar-wrap">
-                            <div class="stat-bar" style="width: 72%"></div>
-                        </div>
-                        <span class="stat-row-value up">+12% vs last week</span>
+            <!-- Priorities + Weekly Stats Row -->
+            <div class="two-col">
+                <!-- Daily Priorities -->
+                <section class="section" aria-label="Today's priorities">
+                    <div class="section-header">
+                        <h2>Today's Priorities</h2>
                     </div>
-                    <div class="stat-row">
-                        <span class="stat-row-label">Loan Volume</span>
-                        <div class="stat-bar-wrap">
-                            <div class="stat-bar" style="width: 65%"></div>
+                    <div class="priorities" role="list">
+                        <div class="action-item" role="listitem">
+                            <div class="action-dot high" aria-label="High priority"></div>
+                            <div>
+                                <div class="action-title">Review AgSunrise applications</div>
+                                <div class="action-detail">5 pending approvals ($3.2M total)</div>
+                            </div>
                         </div>
-                        <span class="stat-row-value up">+$2.3M</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-row-label">Calls Handled</span>
-                        <div class="stat-bar-wrap">
-                            <div class="stat-bar" style="width: 88%"></div>
+                        <div class="action-item" role="listitem">
+                            <div class="action-dot medium" aria-label="Medium priority"></div>
+                            <div>
+                                <div class="action-title">Board meeting prep materials</div>
+                                <div class="action-detail">Deck finalized, ready for review</div>
+                            </div>
                         </div>
-                        <span class="stat-row-value">142 (avg 4.2min)</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-row-label">Digital Logins</span>
-                        <div class="stat-bar-wrap">
-                            <div class="stat-bar" style="width: 54%"></div>
+                        <div class="action-item" role="listitem">
+                            <div class="action-dot medium" aria-label="Medium priority"></div>
+                            <div>
+                                <div class="action-title">Q1 patronage calculations</div>
+                                <div class="action-detail">Due Friday - finance team on track</div>
+                            </div>
                         </div>
-                        <span class="stat-row-value up">+8% MoM</span>
+                        <div class="action-item" role="listitem">
+                            <div class="action-dot low" aria-label="Low priority"></div>
+                            <div>
+                                <div class="action-title">Young farmer program outreach</div>
+                                <div class="action-detail">3 new applications this week</div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="stat-footer">
-                    Reporting period: Feb 24 - Mar 2, 2026
-                </div>
+                </section>
+
+                <!-- Quick Stats -->
+                <section class="section" aria-label="This week's statistics">
+                    <div class="section-header">
+                        <h2>This Week</h2>
+                    </div>
+                    <div class="quick-stats">
+                        <div class="stat-row" role="group" aria-label="Applications: up 12 percent vs last week">
+                            <span class="stat-row-label">Applications</span>
+                            <div class="stat-bar-wrap" role="progressbar" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100">
+                                <div class="stat-bar" style="width: 72%"></div>
+                            </div>
+                            <span class="stat-row-value up">+12% vs last week</span>
+                        </div>
+                        <div class="stat-row" role="group" aria-label="Loan Volume: plus 2.3 million">
+                            <span class="stat-row-label">Loan Volume</span>
+                            <div class="stat-bar-wrap" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">
+                                <div class="stat-bar" style="width: 65%"></div>
+                            </div>
+                            <span class="stat-row-value up">+$2.3M</span>
+                        </div>
+                        <div class="stat-row" role="group" aria-label="Calls Handled: 142, average 4.2 minutes">
+                            <span class="stat-row-label">Calls Handled</span>
+                            <div class="stat-bar-wrap" role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100">
+                                <div class="stat-bar" style="width: 88%"></div>
+                            </div>
+                            <span class="stat-row-value">142 (avg 4.2min)</span>
+                        </div>
+                        <div class="stat-row" role="group" aria-label="Digital Logins: up 8 percent month over month">
+                            <span class="stat-row-label">Digital Logins</span>
+                            <div class="stat-bar-wrap" role="progressbar" aria-valuenow="54" aria-valuemin="0" aria-valuemax="100">
+                                <div class="stat-bar" style="width: 54%"></div>
+                            </div>
+                            <span class="stat-row-value up">+8% MoM</span>
+                        </div>
+                    </div>
+                    <div class="stat-footer">
+                        Reporting period: Feb 24 - Mar 2, 2026
+                    </div>
+                </section>
             </div>
-        </div>
+        </main>
 
         <!-- Footer -->
-        <footer class="footer">
+        <footer class="footer" role="contentinfo">
             <div class="footer-left">
                 <span>Farm Credit Southeast Missouri</span>
-                <span class="footer-sep">|</span>
+                <span class="footer-sep" aria-hidden="true">|</span>
                 <span>Serving agriculture since 1917</span>
             </div>
             <div class="footer-right">
