@@ -1,13 +1,45 @@
 {
   "outputDirectory": ".",
   "rewrites": [
-    { "source": "/patronage-tracker/(.*)", "destination": "/demos/patronage-tracker/$1" },
-    { "source": "/payment-reminders/(.*)", "destination": "/demos/payment-reminders/$1" },
-    { "source": "/agsunrise/(.*)", "destination": "/demos/agsunrise/$1" },
-    { "source": "/agsunrise-platform/(.*)", "destination": "/demos/agsunrise-platform/$1" },
-    { "source": "/cashflow/(.*)", "destination": "/demos/cashflow-simulator/$1" },
-    { "source": "/intelligence/(.*)", "destination": "/demos/intelligence-dashboard/$1" },
-    { "source": "/youth/(.*)", "destination": "/demos/youth-programs/$1" },
-    { "source": "/roi/(.*)", "destination": "/demos/roi-calculator/$1" }
+    {
+      "source": "/patronage-tracker/(.*)",
+      "destination": "/demos/patronage-tracker/$1"
+    },
+    {
+      "source": "/payment-reminders/(.*)",
+      "destination": "/demos/payment-reminders/$1"
+    },
+    {
+      "source": "/agsunrise/(.*)",
+      "destination": "/demos/agsunrise/$1"
+    },
+    {
+      "source": "/agsunrise-platform/(.*)",
+      "destination": "/demos/agsunrise-platform/$1"
+    },
+    {
+      "source": "/cashflow/(.*)",
+      "destination": "/demos/cashflow-simulator/$1"
+    },
+    {
+      "source": "/intelligence/(.*)",
+      "destination": "/demos/intelligence-dashboard/$1"
+    },
+    {
+      "source": "/youth/(.*)",
+      "destination": "/demos/youth-programs/$1"
+    },
+    {
+      "source": "/roi/(.*)",
+      "destination": "/demos/roi-calculator/$1"
+    },
+    {
+      "source": "/semo-dashboard/(.*)",
+      "destination": "/demos/semo-dashboard/"
+    },
+    {
+      "source": "/semo-dashboard",
+      "destination": "/demos/semo-dashboard/index.html"
+    }
   ]
 }
