@@ -4,105 +4,119 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Good Morning SEMO | Farm Credit Southeast Missouri</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="dashboard">
         <!-- Header -->
         <header class="header">
-            <div class="header-left">
-                <div class="logo-area">
-                    <div class="logo-icon">FC</div>
-                    <div class="logo-text">
-                        <span class="logo-title">Farm Credit</span>
-                        <span class="logo-subtitle">Southeast Missouri</span>
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="logo-area">
+                        <div class="logo-icon">FC</div>
+                        <div class="logo-text">
+                            <span class="logo-title">Farm Credit</span>
+                            <span class="logo-subtitle">Southeast Missouri</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="header-center">
-                <h1 class="greeting" id="greeting">Good Morning, Greg</h1>
-                <p class="date" id="current-date"></p>
-            </div>
-            <div class="header-right">
-                <span class="badge">Executive Dashboard</span>
+                <div class="header-center">
+                    <h1 class="greeting" id="greeting">Good Morning, Greg</h1>
+                    <p class="date" id="current-date"></p>
+                </div>
+                <div class="header-right">
+                    <span class="badge">Executive Dashboard</span>
+                </div>
             </div>
         </header>
 
         <!-- Key Metrics -->
-        <section class="section">
-            <h2 class="section-title">Key Metrics</h2>
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <span class="metric-label">Total Loans</span>
-                    <span class="metric-value">$847M</span>
-                    <span class="metric-trend up">+3.2% YoY</span>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-label">Active Borrowers</span>
-                    <span class="metric-value">1,247</span>
-                    <span class="metric-trend up">+28 this quarter</span>
-                </div>
-                <div class="metric-card highlight">
-                    <span class="metric-label">YTD Patronage Projection</span>
-                    <span class="metric-value">$9.8M</span>
-                    <span class="metric-trend up">Up from $9.1M record</span>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-label">Pending Applications</span>
-                    <span class="metric-value">23</span>
-                    <span class="metric-detail">$12.4M total value</span>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-label">Avg Interest Rate</span>
-                    <span class="metric-value">5.85%</span>
-                    <span class="metric-trend neutral">Stable</span>
-                </div>
-                <div class="metric-card">
-                    <span class="metric-label">Member Satisfaction</span>
-                    <span class="metric-value">94%</span>
-                    <span class="metric-trend up">+2pts vs Q4</span>
-                </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Loans</div>
+                <div class="stat-value">$847M</div>
+                <div class="stat-change up">+3.2% YoY</div>
             </div>
-        </section>
+            <div class="stat-card">
+                <div class="stat-label">Active Borrowers</div>
+                <div class="stat-value">1,247</div>
+                <div class="stat-change up">+28 this quarter</div>
+            </div>
+            <div class="stat-card highlight">
+                <div class="stat-label">YTD Patronage Projection</div>
+                <div class="stat-value">$9.8M</div>
+                <div class="stat-change up">Up from $9.1M record</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Pending Applications</div>
+                <div class="stat-value">23</div>
+                <div class="stat-change neutral">$12.4M total value</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Avg Interest Rate</div>
+                <div class="stat-value">5.85%</div>
+                <div class="stat-change neutral">Stable</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Member Satisfaction</div>
+                <div class="stat-value">94%</div>
+                <div class="stat-change up">+2pts vs Q4</div>
+            </div>
+        </div>
 
         <!-- Market + Weather Row -->
         <div class="two-col">
             <!-- Market Snapshot -->
-            <section class="section">
-                <h2 class="section-title">Market Snapshot</h2>
-                <div class="market-table">
-                    <div class="market-row">
-                        <span class="market-commodity">Corn</span>
-                        <span class="market-price">$4.85<small>/bu</small></span>
-                        <span class="market-change up">+2.3%</span>
-                    </div>
-                    <div class="market-row">
-                        <span class="market-commodity">Soybeans</span>
-                        <span class="market-price">$11.20<small>/bu</small></span>
-                        <span class="market-change down">-0.8%</span>
-                    </div>
-                    <div class="market-row">
-                        <span class="market-commodity">Cotton</span>
-                        <span class="market-price">$0.72<small>/lb</small></span>
-                        <span class="market-change up">+1.1%</span>
-                    </div>
-                    <div class="market-row">
-                        <span class="market-commodity">Rice</span>
-                        <span class="market-price">$14.50<small>/cwt</small></span>
-                        <span class="market-change up">+0.5%</span>
-                    </div>
-                    <div class="market-divider"></div>
-                    <div class="market-row">
-                        <span class="market-commodity">Prime Rate</span>
-                        <span class="market-price">8.50%</span>
-                        <span class="market-change neutral">--</span>
-                    </div>
+            <div class="section">
+                <div class="section-header">
+                    <h2>Market Snapshot</h2>
                 </div>
-            </section>
+                <table class="market-table">
+                    <thead>
+                        <tr>
+                            <th>Commodity</th>
+                            <th>Price</th>
+                            <th>Change</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Corn</strong></td>
+                            <td>$4.85/bu</td>
+                            <td class="stat-change up">+2.3%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Soybeans</strong></td>
+                            <td>$11.20/bu</td>
+                            <td class="stat-change down">-0.8%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cotton</strong></td>
+                            <td>$0.72/lb</td>
+                            <td class="stat-change up">+1.1%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Rice</strong></td>
+                            <td>$14.50/cwt</td>
+                            <td class="stat-change up">+0.5%</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="rate-row">
+                    <span>Prime Rate</span>
+                    <strong>8.50%</strong>
+                    <span class="stat-change neutral">unchanged</span>
+                </div>
+            </div>
 
             <!-- Weather -->
-            <section class="section">
-                <h2 class="section-title">SEMO Weather</h2>
+            <div class="section">
+                <div class="section-header">
+                    <h2>SEMO Weather</h2>
+                </div>
                 <div id="weather-loading" class="weather-loading">Loading weather data...</div>
                 <div id="weather-content" class="weather-content" style="display:none;">
                     <div class="weather-current">
@@ -127,83 +141,87 @@
                     <div class="forecast" id="forecast"></div>
                     <div class="weather-alerts" id="weather-alerts"></div>
                 </div>
-            </section>
+            </div>
         </div>
 
-        <!-- Quick Stats + Priorities Row -->
+        <!-- Priorities + Weekly Stats Row -->
         <div class="two-col">
             <!-- Daily Priorities -->
-            <section class="section">
-                <h2 class="section-title">Today's Priorities</h2>
+            <div class="section">
+                <div class="section-header">
+                    <h2>Today's Priorities</h2>
+                </div>
                 <div class="priorities">
-                    <div class="priority-item high">
-                        <span class="priority-dot"></span>
-                        <div class="priority-text">
-                            <strong>Review AgSunrise applications</strong>
-                            <span>5 pending approvals ($3.2M total)</span>
+                    <div class="action-item">
+                        <div class="action-dot high"></div>
+                        <div>
+                            <div class="action-title">Review AgSunrise applications</div>
+                            <div class="action-detail">5 pending approvals ($3.2M total)</div>
                         </div>
                     </div>
-                    <div class="priority-item medium">
-                        <span class="priority-dot"></span>
-                        <div class="priority-text">
-                            <strong>Board meeting prep materials</strong>
-                            <span>Deck finalized, ready for review</span>
+                    <div class="action-item">
+                        <div class="action-dot medium"></div>
+                        <div>
+                            <div class="action-title">Board meeting prep materials</div>
+                            <div class="action-detail">Deck finalized, ready for review</div>
                         </div>
                     </div>
-                    <div class="priority-item medium">
-                        <span class="priority-dot"></span>
-                        <div class="priority-text">
-                            <strong>Q1 patronage calculations</strong>
-                            <span>Due Friday - finance team on track</span>
+                    <div class="action-item">
+                        <div class="action-dot medium"></div>
+                        <div>
+                            <div class="action-title">Q1 patronage calculations</div>
+                            <div class="action-detail">Due Friday - finance team on track</div>
                         </div>
                     </div>
-                    <div class="priority-item low">
-                        <span class="priority-dot"></span>
-                        <div class="priority-text">
-                            <strong>Young farmer program outreach</strong>
-                            <span>3 new applications this week</span>
+                    <div class="action-item">
+                        <div class="action-dot low"></div>
+                        <div>
+                            <div class="action-title">Young farmer program outreach</div>
+                            <div class="action-detail">3 new applications this week</div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
 
             <!-- Quick Stats -->
-            <section class="section">
-                <h2 class="section-title">This Week</h2>
+            <div class="section">
+                <div class="section-header">
+                    <h2>This Week</h2>
+                </div>
                 <div class="quick-stats">
                     <div class="stat-row">
-                        <span class="stat-label">Applications</span>
+                        <span class="stat-row-label">Applications</span>
                         <div class="stat-bar-wrap">
                             <div class="stat-bar" style="width: 72%"></div>
                         </div>
-                        <span class="stat-value up">+12% vs last week</span>
+                        <span class="stat-row-value up">+12% vs last week</span>
                     </div>
                     <div class="stat-row">
-                        <span class="stat-label">Loan Volume</span>
+                        <span class="stat-row-label">Loan Volume</span>
                         <div class="stat-bar-wrap">
                             <div class="stat-bar" style="width: 65%"></div>
                         </div>
-                        <span class="stat-value up">+$2.3M</span>
+                        <span class="stat-row-value up">+$2.3M</span>
                     </div>
                     <div class="stat-row">
-                        <span class="stat-label">Calls Handled</span>
+                        <span class="stat-row-label">Calls Handled</span>
                         <div class="stat-bar-wrap">
                             <div class="stat-bar" style="width: 88%"></div>
                         </div>
-                        <span class="stat-value">142 (avg 4.2min)</span>
+                        <span class="stat-row-value">142 (avg 4.2min)</span>
                     </div>
                     <div class="stat-row">
-                        <span class="stat-label">Digital Logins</span>
+                        <span class="stat-row-label">Digital Logins</span>
                         <div class="stat-bar-wrap">
                             <div class="stat-bar" style="width: 54%"></div>
                         </div>
-                        <span class="stat-value up">+8% MoM</span>
+                        <span class="stat-row-value up">+8% MoM</span>
                     </div>
                 </div>
                 <div class="stat-footer">
-                    <span>Reporting period: Feb 24 - Mar 2, 2026</span>
+                    Reporting period: Feb 24 - Mar 2, 2026
                 </div>
-            </section>
+            </div>
         </div>
 
         <!-- Footer -->
