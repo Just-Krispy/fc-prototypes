@@ -65,17 +65,15 @@ body {
 }
 
 .logo-icon {
-    width: 48px;
-    height: 48px;
-    background: rgba(139, 195, 74, 0.2);
-    border: 2px solid rgba(139, 195, 74, 0.5);
-    border-radius: 10px;
+    width: 52px;
+    height: 52px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 900;
-    font-size: 18px;
-    color: #8bc34a;
+    padding: 3px;
 }
 
 .logo-text {
