@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Youth Programs Dashboard - Farm Credit SEMO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: 'Inter', system-ui, sans-serif; 
+      background: #f4f7f0; 
+      color: #1e3013;
+      line-height: 1.6;
+    }
+    
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #345220 0%, #52812c 60%, #426824 100%);
+      color: white;
+      padding: 32px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    .breadcrumb {
+      font-size: 13px;
+      opacity: 0.8;
+      margin-bottom: 12px;
+    }
+    .breadcrumb a {
+      color: white;
+      text-decoration: none;
+    }
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+    h1 {
+      font-size: 32px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+    
+    /* Stats Bar */
+    .stats-bar {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 20px 24px;
+    }
+    .stats-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 900;
+      color: #52812c;
+      display: block;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+    
+    /* Main Content */
+    .container {
+      max-width: 1200px;
+      margin: 32px auto;
+      padding: 0 24px;
+    }
+    
+    /* Section */
+    .section {
+      background: white;
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+    .section-icon {
+      font-size: 32px;
+    }
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #345220;
+    }
+    
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    
+    /* Card */
+    .card {
+      background: linear-gradient(135deg, #f9fdf6, #ffffff);
+      border: 2px solid #e5e7eb;
+      border-left: 4px solid #52812c;
+      border-radius: 8px;
+      padding: 20px;
+      transition: all 0.2s;
+    }
+    .card:hover {
+      border-color: #52812c;
+      box-shadow: 0 4px 12px rgba(82,129,44,0.15);
+      transform: translateY(-2px);
+    }
+    .card-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #345220;
+      margin-bottom: 6px;
+    }
+    .card-school {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    .card-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-amount {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .badge-year {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: #e5e7eb;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 24px;
+      padding-left: 24px;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -24px;
+      top: 8px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #52812c;
+      border: 3px solid white;
+      box-shadow: 0 0 0 2px #52812c;
+    }
+    .timeline-date {
+      font-size: 12px;
+      font-weight: 700;
+      color: #52812c;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .timeline-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #345220;
+      margin-bottom: 4px;
+    }
+    .timeline-desc {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    /* Partnership Card */
+    .partnership-card {
+      background: linear-gradient(135deg, #345220, #52812c);
+      color: white;
+      border-radius: 12px;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .partnership-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 300px;
+      height: 300px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+    .partnership-content {
+      position: relative;
+      z-index: 1;
+    }
+    .partnership-logo {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    .partnership-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .partnership-desc {
+      font-size: 15px;
+      opacity: 0.9;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .partnership-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 24px;
+    }
+    .partnership-stat-value {
+      font-size: 32px;
+      font-weight: 900;
+      display: block;
+    }
+    .partnership-stat-label {
+      font-size: 12px;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Back Link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #52812c;
+      text-decoration: none;
+      font-weight: 600;
+      margin-bottom: 24px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+    .back-link:hover {
+      background: #f3f4f6;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .stats-container {
+        gap: 24px;
+      }
+      .section {
+        padding: 24px 20px;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .partnership-stats {
+        flex-direction: column;
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-content">
+    <div class="breadcrumb">
+      <a href="../index.html">← Back to Demo Suite</a>
+    </div>
+    <h1>🌱 Youth Programs Dashboard</h1>
+    <p class="subtitle">Investing in the Next Generation of Southeast Missouri Agriculture</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stats-container">
+    <div class="stat">
+      <span class="stat-value">$17,000</span>
+      <span class="stat-label">2024-2025 Scholarships</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">15</span>
+      <span class="stat-label">Recipients</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">12</span>
+      <span class="stat-label">Years (Partnership)</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">5</span>
+      <span class="stat-label">Classroom Locations</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 2025 High School Scholarships -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">🎓</span>
+      <h2 class="section-title">2025 AgSunrise High School Scholarships</h2>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-name">Tessah Dowd</div>
+        <div class="card-school">Woodland High School</div>
+        <div class="card-school" style="font-size:13px;color:#52812c;font-weight:600;">→ Jefferson College</div>
+        <div class="card-meta">
+          <span class="badge badge-amount">$1,500</span>
+          <span class="badge badge-year">2025</span>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-name">Alice Kenedy</div>
+        <div class="card-school">New Madrid County Central</div>
+        <div class="card-school" style="font-size:13px;color:#52812c;font-weight:600;">→ UT-Martin</div>
+        <div class="card-meta">
+          <span class="badge badge-amount">$1,500</span>
+          <span class="badge badge-year">2025</span>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-name">Tucker Hughes</div>
+        <div class="card-school">Richland High School</div>
+        <div class="card-school" style="font-size:13px;color:#52812c;font-weight:600;">→ Arkansas State University</div>
+        <div class="card-meta">
+          <span class="badge badge-amount">$1,500</span>
+          <span class="badge badge-year">2025</span>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-name">Layla Tompkins</div>
+        <div class="card-school">Twin Rivers High School</div>
+        <div class="card-school" style="font-size:13px;color:#52812c;font-weight:600;">→ Three Rivers College</div>
+        <div class="card-meta">
+          <span class="badge badge-amount">$1,500</span>
+          <span class="badge badge-year">2025</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2025 College Scholarships -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">🎓</span>
+      <h2 class="section-title">2025 AgSunrise College Scholarships</h2>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-name">Isabella Foltz</div>
+        <div class="card-school">University of Missouri-Columbia</div>
+        <div class="card-school" style="font-size:13px;color:#52812c;font-weight:600;">Animal Science Major</div>
+        <div class="card-meta">
+          <span class="badge badge-amount">$1,000</span>
+          <span class="badge badge-year">2025</span>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-name">Gracen James</div>
+        <div class="card-school">Southeast Missouri State University</div>
+        <div class="card-school" style="font-size:13px;color:#52812c;font-weight:600;">Ag Business: Ag Industry</div>
+        <div class="card-meta">
+          <span class="badge badge-amount">$1,000</span>
+          <span class="badge badge-year">2025</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2024 High School Scholarships -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">🎓</span>
+      <h2 class="section-title">2024 AgSunrise High School Scholarships</h2>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-name">Alex Porter</div>
+        <div class="card-school">Richland High School</div>
+        <div class="card-meta">
+          <span class="badge badge-amount">$1,000</span>
+          <span class="badge badge-year">2024</span>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-name">Austin Bodenstein</div>
+        <div class="card-school">Jackson High School</div>
+        <div class="card-meta">
+          <span class="badge badge-amount">$1,000</span>
+          <span class="badge badge-year">2024</span>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-name">Avery Towery</div>
+        <div class="card-school">New Madrid County Central</div>
+        <div class="card-meta">
+          <span class="badge badge-amount">$1,000</span>
+          <span class="badge badge-year">2024</span>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-name">Carson Hahs</div>
+        <div class="card-school">Oak Ridge High School</div>
+        <div class="card-meta">
+          <span class="badge badge-amount">$1,000</span>
+          <span class="badge badge-year">2024</span>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-name">Colt Parker</div>
+        <div class="card-school">Sikeston High School</div>
+        <div class="card-meta">
+          <span class="badge badge-amount">$1,000</span>
+          <span class="badge badge-year">2024</span>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-name">Hunter Maclin</div>
+        <div class="card-school">Caruthersville High School</div>
+        <div class="card-meta">
+          <span class="badge badge-amount">$1,000</span>
+          <span class="badge badge-year">2024</span>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-name">Lily Stephens</div>
+        <div class="card-school">Puxico High School</div>
+        <div class="card-meta">
+          <span class="badge badge-amount">$1,000</span>
+          <span class="badge badge-year">2024</span>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-name">Logan Stubenrach</div>
+        <div class="card-school">Bell City High School</div>
+        <div class="card-meta">
+          <span class="badge badge-amount">$1,000</span>
+          <span class="badge badge-year">2024</span>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-name">Madylin Clenney</div>
+        <div class="card-school">Gideon High School</div>
+        <div class="card-meta">
+          <span class="badge badge-amount">$1,000</span>
+          <span class="badge badge-year">2024</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Three Rivers College Partnership -->
+  <div class="section" style="padding:0;overflow:hidden;">
+    <div class="partnership-card">
+      <div class="partnership-content">
+        <div class="partnership-logo">🏫</div>
+        <h2 class="partnership-title">Three Rivers College Partnership</h2>
+        <p class="partnership-desc">
+          Farm Credit SEMO and Three Rivers College announced a historic 12-year partnership in September 2024 to build agriculture education classrooms across Southeast Missouri. The Farm Credit Ag Classroom at the Three Rivers Farm in Fairdealing, Missouri, serves FFA chapters, 4-H clubs, and agribusiness training programs.
+        </p>
+        <div class="partnership-stats">
+          <div>
+            <span class="partnership-stat-value">5</span>
+            <span class="partnership-stat-label">Classroom Locations</span>
+          </div>
+          <div>
+            <span class="partnership-stat-value">12</span>
+            <span class="partnership-stat-label">Year Partnership</span>
+          </div>
+          <div>
+            <span class="partnership-stat-value">Jan 22, 2026</span>
+            <span class="partnership-stat-label">Ribbon Cutting</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">📅</span>
+      <h2 class="section-title">Key Milestones</h2>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-date">January 2026</div>
+        <div class="timeline-title">Three Rivers Farm Classroom Ribbon Cutting</div>
+        <div class="timeline-desc">Grand opening of Farm Credit Ag Classroom in Fairdealing, Missouri</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">January-February 2025</div>
+        <div class="timeline-title">$9 Million Patronage Distribution</div>
+        <div class="timeline-desc">Record-breaking cash refund to borrowing members at Customer Appreciation Events</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2025</div>
+        <div class="timeline-title">AgSunrise Scholarships Awarded</div>
+        <div class="timeline-desc">6 scholarships totaling $8,000 to high school seniors and college students</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">September 2024</div>
+        <div class="timeline-title">Three Rivers College Partnership Announced</div>
+        <div class="timeline-desc">12-year commitment to fund agriculture classrooms across 5 locations</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2024</div>
+        <div class="timeline-title">AgSunrise Scholarships Awarded</div>
+        <div class="timeline-desc">9 high school scholarships totaling $9,000 to graduating seniors</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Ongoing</div>
+        <div class="timeline-title">FFA & 4-H Sponsorships</div>
+        <div class="timeline-desc">SEMO District Fair sponsor, event support, donations to youth organizations</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Chatbot will be added via automation script -->
+
+</body>
+</html>

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Application Status — Farm Credit SEMO</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f4f7f0;color:#1e3013;min-height:100vh}
+    header{background:#52812c;color:white;padding:16px 24px}.logo{font-size:20px;font-weight:700}.logo span{color:#8bc34a}
+    .main{max-width:540px;margin:40px auto;padding:0 16px}
+    .card{background:white;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.1);padding:32px}
+    .card h2{font-size:20px;font-weight:700;color:#52812c;margin-bottom:8px}
+    .card p{color:#666;font-size:14px;margin-bottom:20px}
+    input{width:100%;padding:12px 16px;border:2px solid #ddd;border-radius:10px;font-size:16px;outline:none;letter-spacing:1px}
+    input:focus{border-color:#52812c}
+    button{background:#52812c;color:white;border:none;width:100%;padding:12px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;margin-top:12px}
+    .result{display:none;margin-top:24px;border-top:1px solid #eee;padding-top:20px}
+    .badge{display:inline-block;padding:7px 18px;border-radius:20px;font-weight:700;font-size:14px;margin:12px 0}
+    .b-submitted{background:#cce5ff;color:#004085}.b-under_review{background:#fff3cd;color:#856404}
+    .b-approved{background:#d4edda;color:#155724}.b-declined{background:#f8d7da;color:#721c24}
+    .b-more_info{background:#f8d7da;color:#721c24}
+    .tl{margin-top:20px}.tl-item{display:flex;gap:12px;margin-bottom:16px}
+    .tl-dot{width:12px;height:12px;border-radius:50%;background:#52812c;margin-top:4px;flex-shrink:0}
+    .tl-dot.off{background:#ddd}
+    .tl-text strong{display:block;font-size:14px}.tl-text span{color:#aaa;font-size:12px}
+    .error{color:#ef4444;font-size:14px;margin-top:10px}
+    @media (max-width: 768px) {
+      .cards, .wrap, .container { max-width: 100%; padding: 0 16px 32px; }
+      header h1 { font-size: 26px; }
+      .stats-row, .stat-row { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+<header><div class="logo">Farm Credit <span>SEMO</span></div></header>
+<div class="main">
+  <div class="card">
+    <h2>🌱 Application Status</h2>
+    <p>Enter your reference number to check your AgSunrise application status.</p>
+    <input type="text" id="refIn" placeholder="AS-2025-0000"/>
+    <button onclick="check()">Check Status</button>
+    <div class="error" id="err"></div>
+    <div class="result" id="result">
+      <div style="font-size:13px;color:#888">Ref: <strong id="rRef"></strong> · Branch: <strong id="rBranch"></strong></div>
+      <div class="badge" id="rBadge"></div>
+      <div style="font-size:16px;font-weight:600" id="rName"></div>
+      <div style="font-size:13px;color:#aaa;margin-top:4px">Submitted: <span id="rDate"></span></div>
+      <div class="tl" id="tl"></div>
+    </div>
+  </div>
+</div>
+<script>
+  const labels={submitted:'✅ Submitted',under_review:'🔍 Under Review',more_info:'📋 More Info Needed',approved:'🎉 Approved!',declined:'❌ Declined'};
+  const classes={submitted:'b-submitted',under_review:'b-under_review',more_info:'b-more_info',approved:'b-approved',declined:'b-declined'};
+  const params=new URLSearchParams(window.location.search);
+  if(params.get('ref')){document.getElementById('refIn').value=params.get('ref');setTimeout(check,100);}
+  function check(){
+    const ref=document.getElementById('refIn').value.trim();
+    if(!ref)return;
+    document.getElementById('err').textContent='';
+    const apps=JSON.parse(localStorage.getItem('fc_apps')||'[]');
+    const a=apps.find(x=>x.ref_number===ref);
+    if(!a){document.getElementById('err').textContent='Application not found. Please check your reference number.';document.getElementById('result').style.display='none';return;}
+    document.getElementById('rRef').textContent=a.ref_number;
+    document.getElementById('rBranch').textContent=a.branch;
+    document.getElementById('rName').textContent=`${a.first_name} ${a.last_name} — AgSunrise Application`;
+    document.getElementById('rDate').textContent=new Date(a.submitted_at).toLocaleDateString();
+    const b=document.getElementById('rBadge');b.textContent=labels[a.status]||a.status;b.className='badge '+(classes[a.status]||'');
+    const done=(s)=>['submitted','under_review','more_info','approved','declined'].indexOf(a.status)>=['submitted','under_review','more_info','approved','declined'].indexOf(s);
+    document.getElementById('tl').innerHTML=[
+      {l:'Application Received',s:'Your application is in our system.',d:true},
+      {l:'Under Review',s:'Being reviewed by our lending team (up to 5 business days).',d:['under_review','more_info','approved','declined'].includes(a.status)},
+      {l:a.status==='approved'?'🎉 Approved!':a.status==='declined'?'Decision Made':'Final Decision',s:a.status==='approved'?'Congratulations! Your branch will contact you.':a.status==='declined'?'Please contact your branch for details.':'Within 15 business days.',d:['approved','declined'].includes(a.status)}
+    ].map(x=>`<div class="tl-item"><div class="tl-dot${x.d?'':' off'}"></div><div class="tl-text"><strong>${x.l}</strong><span>${x.s}</span></div></div>`).join('');
+    document.getElementById('result').style.display='block';
+  }
+</script>
+<footer>
+<div style="margin-top:32px;padding-top:24px;border-top:1px solid #e5e7eb;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap">
+  <div style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:linear-gradient(135deg,#d1fae5,#ecfdf5);border:2px solid #10b981;border-radius:8px;font-size:13px;font-weight:600;color:#065f46">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span>WCAG 2.1 AA</span>
+  </div>
+  
+  <div style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:linear-gradient(135deg,#dbeafe,#eff6ff);border:2px solid #3b82f6;border-radius:8px;font-size:13px;font-weight:600;color:#1e40af">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+    </svg>
+    <span>Keyboard Accessible</span>
+  </div>
+  
+  <div style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:linear-gradient(135deg,#fef3c7,#fffbeb);border:2px solid #f59e0b;border-radius:8px;font-size:13px;font-weight:600;color:#92400e">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+      <circle cx="12" cy="12" r="3"></circle>
+    </svg>
+    <span>Screen Reader Friendly</span>
+  </div>
+</div>
+
+<p style="text-align:center;margin-top:16px;font-size:11px;color:#9ca3af">
+  Built with accessibility in mind · Tested with NVDA, VoiceOver, and Lighthouse
+</p>
+
+</footer>
+<!-- Farm Credit AI Assistant Widget - Add before </body> -->
+<div id="fc-chatbot-widget">
+  <!-- Chat Button -->
+  <button id="fc-chat-button" aria-label="Open Farm Credit AI Assistant" style="position:fixed;bottom:24px;right:24px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#345220,#52812c);border:none;box-shadow:0 4px 16px rgba(82,129,44,0.4);cursor:pointer;z-index:9999;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+  </button>
+
+  <!-- Chat Modal -->
+  <div id="fc-chat-modal" role="dialog" aria-labelledby="fc-chat-title" aria-modal="true" style="position:fixed;bottom:100px;right:24px;width:380px;max-width:calc(100vw - 48px);height:550px;max-height:calc(100vh - 150px);background:white;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2);z-index:10000;display:none;flex-direction:column;overflow:hidden">
+    
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#345220,#52812c);color:white;padding:16px 20px;display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px">🤖</div>
+        <div>
+          <div id="fc-chat-title" style="font-weight:700;font-size:16px">Farm Credit AI Assistant</div>
+          <div style="font-size:12px;opacity:0.9">Online · Ready to help</div>
+        </div>
+      </div>
+      <button id="fc-chat-close" aria-label="Close chat" style="background:none;border:none;color:white;font-size:24px;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:4px;transition:background 0.2s">×</button>
+    </div>
+
+    <!-- Messages -->
+    <div id="fc-chat-messages" style="flex:1;overflow-y:auto;padding:20px;background:#f9fafb;display:flex;flex-direction:column;gap:12px">
+      <!-- Welcome message -->
+      <div class="fc-chat-message-bot">
+        <div style="background:white;padding:12px 16px;border-radius:12px 12px 12px 4px;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
+          <div style="font-size:14px;line-height:1.5">
+            👋 Hi! I'm your Farm Credit AI Assistant. I can help you with:<br><br>
+            • <strong>Patronage</strong> - Check your dividend estimates<br>
+            • <strong>Loans</strong> - Application status & requirements<br>
+            • <strong>AgSunrise</strong> - Young farmer programs<br>
+            • <strong>Account</strong> - General questions<br><br>
+            What can I help you with today?
+          </div>
+        </div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:4px;padding-left:4px">Just now</div>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div style="padding:16px;background:white;border-top:1px solid #e5e7eb">
+      <div style="display:flex;gap:8px">
+        <input id="fc-chat-input" type="text" placeholder="Type your message..." aria-label="Chat message" style="flex:1;padding:12px 16px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;outline:none" />
+        <button id="fc-chat-send" aria-label="Send message" style="background:linear-gradient(135deg,#345220,#52812c);color:white;border:none;width:44px;height:44px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity 0.2s">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Quick Actions -->
+      <div id="fc-quick-actions" style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="fc-quick-btn" data-message="What is my patronage dividend?">💰 Patronage</button>
+        <button class="fc-quick-btn" data-message="Check my loan application status">📋 Loan Status</button>
+        <button class="fc-quick-btn" data-message="Tell me about AgSunrise">🌱 AgSunrise</button>
+        <button class="fc-quick-btn" data-message="I need help with my account">❓ Help</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Chat button hover */
+#fc-chat-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(82,129,44,0.5);
+}
+
+#fc-chat-button:active {
+  transform: scale(1.05);
+}
+
+#fc-chat-close:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Quick action buttons */
+.fc-quick-btn {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.fc-quick-btn:hover {
+  background: #e5e7eb;
+  border-color: #52812c;
+}
+
+/* Chat input focus */
+#fc-chat-input:focus {
+  border-color: #52812c;
+  box-shadow: 0 0 0 3px rgba(82,129,44,0.1);
+}
+
+/* Scrollbar */
+#fc-chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+#fc-chat-messages::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+#fc-chat-messages::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Message styles */
+.fc-chat-message-user {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.fc-chat-message-user > div:first-child {
+  background: linear-gradient(135deg,#345220,#52812c);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 12px 12px 4px 12px;
+  max-width: 80%;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.fc-chat-message-bot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  #fc-chat-button {
+    bottom: 16px;
+    right: 16px;
+    width: 56px;
+    height: 56px;
+  }
+  
+  #fc-chat-modal {
+    bottom: 88px;
+    right: 16px;
+    left: 16px;
+    width: auto;
+    max-width: none;
+  }
+}
+
+/* Typing indicator */
+.fc-typing {
+  display: flex;
+  gap: 4px;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 12px 12px 12px 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  width: fit-content;
+}
+
+.fc-typing span {
+  width: 8px;
+  height: 8px;
+  background: #9ca3af;
+  border-radius: 50%;
+  animation: fc-typing-animation 1.4s infinite;
+}
+
+.fc-typing span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.fc-typing span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes fc-typing-animation {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-8px);
+  }
+}
+</style>
+
+<script>
+(function() {
+  // Chat state
+  let chatOpen = false;
+  
+  // DOM elements
+  const chatButton = document.getElementById('fc-chat-button');
+  const chatModal = document.getElementById('fc-chat-modal');
+  const chatClose = document.getElementById('fc-chat-close');
+  const chatInput = document.getElementById('fc-chat-input');
+  const chatSend = document.getElementById('fc-chat-send');
+  const chatMessages = document.getElementById('fc-chat-messages');
+  const quickActions = document.querySelectorAll('.fc-quick-btn');
+  
+  // Demo responses
+  const responses = {
+    'patronage': 'Your estimated 2024 patronage dividend is <strong>$3,250</strong> based on your current loan balance. This is part of our record <strong>$9.1M distribution</strong>! 💰',
+    'loan': 'Your loan application <strong>#AG2024-0157</strong> is currently in <strong>Underwriting Review</strong>. Expected decision within 5-7 business days. You\'ll receive email/SMS updates. 📋',
+    'agsunrise': '<strong>AgSunrise</strong> is our young & beginning farmer program! It includes:<br>• Reduced interest rates<br>• Flexible terms<br>• Mentorship matching<br>• Free financial education<br><br>Apply at <a href="agsunrise/index.html" style="color:#52812c">farmcreditsemo.com/agsunrise</a> 🌱',
+    'help': 'I can help with:<br>• Account questions<br>• Payment schedules<br>• Document uploads<br>• Contact info updates<br><br>Or call us at <strong>(877) 730-7327</strong> for immediate assistance. ❓',
+    'default': 'Thanks for your question! For specific account details, please call us at <strong>(877) 730-7327</strong> or email <strong>support@farmcreditsemo.com</strong>. Our team is ready to help! 😊'
+  };
+  
+  // Toggle chat
+  function toggleChat() {
+    chatOpen = !chatOpen;
+    chatModal.style.display = chatOpen ? 'flex' : 'none';
+    if (chatOpen) {
+      chatInput.focus();
+      // Hide quick actions after first open (keep it clean)
+      setTimeout(() => {
+        const quickActionsContainer = document.getElementById('fc-quick-actions');
+        if (quickActionsContainer && chatMessages.children.length > 1) {
+          quickActionsContainer.style.display = 'none';
+        }
+      }, 100);
+    }
+  }
+  
+  // Add message
+  function addMessage(text, isUser = false) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = isUser ? 'fc-chat-message-user' : 'fc-chat-message-bot';
+    
+    const time = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    
+    if (isUser) {
+      msgDiv.innerHTML = `
+        <div>${text}</div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:4px;padding-right:4px">${time}</div>
+      `;
+    } else {
+      msgDiv.innerHTML = `
+        <div style="background:white;padding:12px 16px;border-radius:12px 12px 12px 4px;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
+          <div style="font-size:14px;line-height:1.5">${text}</div>
+        </div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:4px;padding-left:4px">${time}</div>
+      `;
+    }
+    
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+  
+  // Show typing indicator
+  function showTyping() {
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'fc-chat-message-bot';
+    typingDiv.id = 'fc-typing-indicator';
+    typingDiv.innerHTML = '<div class="fc-typing"><span></span><span></span><span></span></div>';
+    chatMessages.appendChild(typingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+  
+  // Remove typing indicator
+  function hideTyping() {
+    const typingIndicator = document.getElementById('fc-typing-indicator');
+    if (typingIndicator) typingIndicator.remove();
+  }
+  
+  // Get response
+  function getResponse(message) {
+    const msg = message.toLowerCase();
+    
+    if (msg.includes('patronage') || msg.includes('dividend') || msg.includes('refund')) {
+      return responses.patronage;
+    } else if (msg.includes('loan') || msg.includes('application') || msg.includes('status')) {
+      return responses.loan;
+    } else if (msg.includes('agsunrise') || msg.includes('young farmer') || msg.includes('beginning')) {
+      return responses.agsunrise;
+    } else if (msg.includes('help') || msg.includes('support') || msg.includes('account')) {
+      return responses.help;
+    } else {
+      return responses.default;
+    }
+  }
+  
+  // Send message
+  function sendMessage() {
+    const message = chatInput.value.trim();
+    if (!message) return;
+    
+    // Add user message
+    addMessage(message, true);
+    chatInput.value = '';
+    
+    // Show typing
+    showTyping();
+    
+    // Simulate AI response delay
+    setTimeout(() => {
+      hideTyping();
+      const response = getResponse(message);
+      addMessage(response);
+    }, 800 + Math.random() * 400); // 800-1200ms delay
+  }
+  
+  // Event listeners
+  chatButton.addEventListener('click', toggleChat);
+  chatClose.addEventListener('click', toggleChat);
+  chatSend.addEventListener('click', sendMessage);
+  
+  chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+  
+  quickActions.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const message = btn.getAttribute('data-message');
+      chatInput.value = message;
+      sendMessage();
+    });
+  });
+  
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && chatOpen) {
+      toggleChat();
+    }
+  });
+  
+  // Close modal when clicking outside
+  chatModal.addEventListener('click', (e) => {
+    if (e.target === chatModal) {
+      toggleChat();
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farm Intelligence Dashboard | Farm Credit SEMO</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  
+  <!-- Leaflet CSS for maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <!-- Chart.js for interactive charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  
+  <style>
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    
+    html, body {
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100vw;
+    }
+    
+    /* Skip to content link for screen readers */
+    .skip-to-content {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--fc-primary);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+      font-weight: 600;
+      z-index: 10000;
+      border-radius: 0 0 8px 0;
+    }
+    
+    .skip-to-content:focus {
+      top: 0;
+    }
+    
+    /* Focus indicators */
+    *:focus-visible {
+      outline: 3px solid var(--fc-accent);
+      outline-offset: 2px;
+    }
+    
+    button:focus-visible {
+      outline: 3px solid var(--fc-accent);
+      outline-offset: 2px;
+    }
+    
+    a:focus-visible {
+      outline: 3px solid var(--fc-accent);
+      outline-offset: 2px;
+    }
+    
+    :root {
+      --fc-primary: #52812c;
+      --fc-dark: #345220;
+      --fc-accent: #8bc34a;
+      --fc-light: #a8d08d;
+      --fc-bg: #fafbf8;
+      --fc-gradient: linear-gradient(135deg, #345220 0%, #52812c 50%, #8bc34a 100%);
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      background: var(--fc-bg);
+      color: #1f2937;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    
+    /* Header */
+    .header {
+      background: var(--fc-gradient);
+      border-bottom: 2px solid var(--fc-accent);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 100vw;
+      overflow: hidden;
+    }
+    
+    .header-left { 
+      display: flex; 
+      align-items: center; 
+      gap: 1.5rem;
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-shrink: 0;
+    }
+    
+    .biostar {
+      width: 50px;
+      height: 50px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      flex-shrink: 0;
+    }
+    
+    .logo { 
+      height: 45px; 
+      filter: brightness(0) invert(1);
+      flex-shrink: 0;
+    }
+    
+    .header-title { 
+      font-size: 1.75rem; 
+      font-weight: 700; 
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+    
+    .demo-badge {
+      background: rgba(255, 255, 255, 0.25);
+      color: white;
+      padding: 0.375rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    
+    /* Tab Navigation */
+    .tabs {
+      background: white;
+      border-bottom: 2px solid #e5e7eb;
+      padding: 0 2rem;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    
+    .tab {
+      padding: 1.125rem 1.75rem;
+      border: none;
+      background: transparent;
+      color: #6b7280;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+      font-size: 0.9375rem;
+      position: relative;
+    }
+    
+    .tab::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--fc-gradient);
+      transform: scaleX(0);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .tab:hover { 
+      color: var(--fc-primary); 
+      background: #f9fafb;
+    }
+    
+    .tab.active {
+      color: var(--fc-primary);
+    }
+    
+    .tab.active::before {
+      transform: scaleX(1);
+    }
+    
+    /* Main Content */
+    .content {
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .tab-panel { 
+      display: none; 
+      width: 100%;
+    }
+    .tab-panel.active { 
+      display: block; 
+    }
+    
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: box-shadow 0.3s ease;
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+    }
+    
+    .card:hover {
+      box-shadow: 0 4px 12px rgba(82, 129, 44, 0.08);
+    }
+    
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 2px solid #f3f4f6;
+      background: linear-gradient(90deg, transparent 0%, rgba(82, 129, 44, 0.03) 100%);
+      margin: -1.75rem -1.75rem 1.25rem -1.75rem;
+      padding: 1.25rem 1.75rem;
+      border-radius: 12px 12px 0 0;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    
+    .card-title {
+      font-size: 1.375rem;
+      font-weight: 700;
+      color: var(--fc-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .card-title::before {
+      content: '';
+      width: 4px;
+      height: 1.5rem;
+      background: var(--fc-gradient);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    
+    /* Grid Layouts */
+    .grid-2 { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); 
+      gap: 1.5rem; 
+      width: 100%;
+    }
+    .grid-3 { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); 
+      gap: 1.5rem; 
+      width: 100%;
+    }
+    .grid-4 { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); 
+      gap: 1rem; 
+      width: 100%;
+    }
+    
+    /* Health Score */
+    .health-score {
+      text-align: center;
+      padding: 2.5rem 2rem;
+      background: var(--fc-gradient);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .health-score::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    
+    .health-score::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -10%;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    
+    .score-value {
+      font-size: 5rem;
+      font-weight: 800;
+      color: white;
+      line-height: 1;
+      text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .score-label {
+      color: rgba(255, 255, 255, 0.95);
+      margin-top: 0.75rem;
+      font-size: 0.9375rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .health-trend {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.5rem 1.125rem;
+      border-radius: 9999px;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      margin-top: 1.25rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .health-trend.improving { 
+      background: rgba(255, 255, 255, 0.25);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+    }
+    
+    /* Stats Grid */
+    .stat-card {
+      background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+      border-radius: 8px;
+      padding: 1.25rem;
+      border: 1px solid #e5e7eb;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--fc-gradient);
+      transform: scaleY(0);
+      transition: transform 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(82, 129, 44, 0.15);
+      border-color: var(--fc-accent);
+    }
+    
+    .stat-card:hover::before {
+      transform: scaleY(1);
+    }
+    
+    .stat-label {
+      color: #6b7280;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+    }
+    
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--fc-dark);
+    }
+    
+    /* Loan Cards Grid */
+    .loans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
+      gap: 1.25rem;
+      width: 100%;
+    }
+    
+    .loan-card {
+      background: linear-gradient(135deg, #ffffff 0%, #fafbf8 100%);
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      max-width: 100%;
+    }
+    
+    .loan-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--fc-gradient);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    
+    .loan-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(82, 129, 44, 0.15);
+      border-color: var(--fc-accent);
+    }
+    
+    .loan-card:hover::before {
+      transform: scaleX(1);
+    }
+    
+    .loan-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+    
+    .loan-name {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--fc-dark);
+      line-height: 1.3;
+    }
+    
+    .loan-amount {
+      font-size: 1.375rem;
+      font-weight: 800;
+      color: var(--fc-primary);
+      white-space: nowrap;
+    }
+    
+    .loan-details {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #f3f4f6;
+    }
+    
+    .loan-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    
+    .loan-detail-label {
+      font-size: 0.75rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+    
+    .loan-detail-value {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: #111827;
+    }
+    
+    /* Mobile loan cards */
+    @media (max-width: 768px) {
+      .loans-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .loan-card {
+        padding: 1.25rem;
+      }
+      
+      .loan-name {
+        font-size: 1rem;
+      }
+      
+      .loan-amount {
+        font-size: 1.125rem;
+      }
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .badge-critical { background: #fee2e2; color: #991b1b; }
+    .badge-high { background: #fed7aa; color: #9a3412; }
+    .badge-moderate { background: #fef3c7; color: #92400e; }
+    .badge-low { background: #d1fae5; color: #065f46; }
+    
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+    
+    .modal.active { display: flex; }
+    
+    .modal-content {
+      background: white;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+      margin: auto;
+    }
+    
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #111827;
+      flex: 1;
+      min-width: 0;
+      word-break: break-word;
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #6b7280;
+      cursor: pointer;
+      padding: 0;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    
+    .modal-close:hover { background: #f3f4f6; }
+    
+    .modal-body { padding: 1.5rem; }
+    
+    @media (max-width: 768px) {
+      .modal {
+        padding: 1rem;
+      }
+      .modal-content {
+        max-height: 85vh;
+        border-radius: 12px;
+      }
+      .modal-header {
+        padding: 1.25rem;
+      }
+      .modal-title {
+        font-size: 1.125rem;
+      }
+      .modal-body {
+        padding: 1.25rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .modal {
+        padding: 0.5rem;
+      }
+      .modal-content {
+        max-height: 90vh;
+      }
+      .modal-header {
+        padding: 1rem;
+      }
+      .modal-title {
+        font-size: 1rem;
+      }
+      .modal-body {
+        padding: 1rem;
+      }
+    }
+    
+    /* Commodity Cards */
+    .commodity-card {
+      background: linear-gradient(135deg, #ffffff 0%, #fafbf8 100%);
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 1.25rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .commodity-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--fc-gradient);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    
+    .commodity-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 16px rgba(82, 129, 44, 0.15);
+      border-color: var(--fc-accent);
+    }
+    
+    .commodity-card:hover::before {
+      transform: scaleX(1);
+    }
+    
+    .commodity-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+    
+    .commodity-name {
+      font-weight: 700;
+      color: var(--fc-dark);
+      font-size: 1rem;
+    }
+    
+    .commodity-price {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--fc-dark);
+      margin: 0.75rem 0;
+    }
+    
+    .commodity-change {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    
+    .commodity-change.negative { color: #dc2626; }
+    .commodity-change.positive { color: #16a34a; }
+    
+    /* Map */
+    #county-map {
+      height: 500px;
+      width: 100%;
+      max-width: 100%;
+      border-radius: 6px;
+      border: 1px solid #e5e7eb;
+    }
+    
+    @media (max-width: 768px) {
+      #county-map {
+        height: 400px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      #county-map {
+        height: 300px;
+      }
+    }
+    
+    /* Button */
+    .btn {
+      background: var(--fc-gradient);
+      color: white;
+      border: none;
+      padding: 0.875rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+      box-shadow: 0 4px 12px rgba(82, 129, 44, 0.25);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn:hover { 
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(82, 129, 44, 0.35);
+    }
+    
+    .btn:active {
+      transform: translateY(0);
+    }
+    
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #374151;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .btn-secondary:hover { 
+      background: #d1d5db;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+    
+    /* Period Toggle Buttons */
+    .period-btn {
+      background: white;
+      border: 1px solid #d1d5db;
+      color: #6b7280;
+      padding: 0.375rem 0.875rem;
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .period-btn:hover {
+      border-color: var(--fc-accent);
+      color: var(--fc-primary);
+    }
+    
+    .period-btn.active {
+      background: var(--fc-primary);
+      border-color: var(--fc-primary);
+      color: white;
+    }
+    
+    /* Patronage Banner */
+    .patronage-banner {
+      background: var(--fc-gradient);
+      color: white;
+      padding: 3rem 2rem;
+      border-radius: 16px;
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(82, 129, 44, 0.25);
+    }
+    
+    .patronage-banner::before {
+      content: '⭐';
+      position: absolute;
+      top: 1rem;
+      right: 2rem;
+      font-size: 4rem;
+      opacity: 0.15;
+    }
+    
+    .patronage-banner::after {
+      content: '🌾';
+      position: absolute;
+      bottom: 1rem;
+      left: 2rem;
+      font-size: 3rem;
+      opacity: 0.15;
+    }
+    
+    .patronage-value {
+      font-size: 4rem;
+      font-weight: 900;
+      line-height: 1;
+      text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .patronage-label {
+      font-size: 1.25rem;
+      opacity: 0.95;
+      margin-top: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.025em;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Footer */
+    footer {
+      background: white;
+      border-top: 1px solid #e5e7eb;
+      padding: 2rem;
+      text-align: center;
+      margin-top: 3rem;
+    }
+    
+    footer p {
+      color: #6b7280;
+      font-size: 0.875rem;
+      line-height: 1.8;
+      margin: 0;
+    }
+    
+    footer a {
+      color: var(--fc-primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    footer a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header { 
+        padding: 1rem; 
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+      .header-left {
+        gap: 0.75rem;
+      }
+      .header-title { 
+        font-size: 1rem; 
+        gap: 0.5rem;
+      }
+      .biostar { width: 36px; height: 36px; font-size: 1.25rem; }
+      .logo { height: 32px; }
+      .demo-badge {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.625rem;
+      }
+      .content { padding: 1rem; }
+      .tabs { 
+        padding: 0 1rem; 
+        gap: 0;
+      }
+      .tab { 
+        padding: 0.875rem 1rem; 
+        font-size: 0.8125rem; 
+      }
+      .grid-2, .grid-3, .grid-4, .loans-grid { 
+        grid-template-columns: 1fr !important; 
+      }
+      .score-value { font-size: 3.5rem; }
+      .patronage-value { font-size: 2.5rem; }
+      .card { 
+        padding: 1.25rem; 
+        border-radius: 8px;
+      }
+      .card-header { 
+        flex-direction: column; 
+        align-items: flex-start; 
+        gap: 0.5rem;
+        margin: -1.25rem -1.25rem 1rem -1.25rem;
+        padding: 1rem 1.25rem;
+      }
+      .card-title { 
+        font-size: 1.125rem;
+        width: 100%;
+      }
+      .loan-card {
+        padding: 1.25rem;
+        border-radius: 8px;
+      }
+      .loan-name {
+        font-size: 1rem;
+        word-break: break-word;
+      }
+      .loan-amount {
+        font-size: 1.25rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .header-title {
+        font-size: 0.875rem;
+      }
+      .header-left {
+        gap: 0.5rem;
+      }
+      .biostar { width: 32px; height: 32px; font-size: 1rem; }
+      .logo { height: 28px; }
+      .content { padding: 0.75rem; }
+      .tabs { padding: 0 0.75rem; }
+      .tab { padding: 0.75rem 0.75rem; font-size: 0.75rem; }
+      .card { padding: 1rem; }
+      .score-value { font-size: 2.5rem; }
+      .patronage-value { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip to content for keyboard users -->
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
+  
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo-container">
+        <!-- Farm Credit BioStar -->
+        <div class="biostar">⭐</div>
+        <img src="logo.svg" alt="Farm Credit SEMO" class="logo" onerror="this.style.display='none'">
+      </div>
+      <h1 class="header-title">
+        Farm Intelligence Dashboard
+        <span class="demo-badge">DEMO</span>
+      </h1>
+    </div>
+    <a href="index.html" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 600; padding: 0.5rem 1rem; background: rgba(255,255,255,0.15); border-radius: 8px; transition: all 0.2s; backdrop-filter: blur(10px);" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">
+      ← Back to Demo Suite
+    </a>
+  </header>
+  
+  <!-- Tab Navigation -->
+  <nav class="tabs" role="tablist" aria-label="Dashboard sections">
+    <button class="tab active" role="tab" aria-selected="true" aria-controls="overview" data-tab="overview" id="tab-overview">Overview</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="market" data-tab="market" id="tab-market">Market Intelligence</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="geographic" data-tab="geographic" id="tab-geographic">Geographic</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="executive" data-tab="executive" id="tab-executive">Executive Summary</button>
+  </nav>
+  
+  <!-- Main Content -->
+  <main class="content" id="main-content">
+    
+    <!-- OVERVIEW TAB -->
+    <div id="overview" class="tab-panel active" role="tabpanel" aria-labelledby="tab-overview">
+      
+      <div class="grid-2">
+        <!-- Portfolio Health Score -->
+        <div class="card health-score">
+          <div class="score-value">73</div>
+          <div class="score-label">Portfolio Health Score</div>
+          <div class="health-trend improving">↗ +2.4% vs last month</div>
+        </div>
+        
+        <!-- Key Metrics -->
+        <div class="card">
+          <div class="grid-3">
+            <div class="stat-card">
+              <div class="stat-label">Avg DSCR</div>
+              <div class="stat-value">1.42</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Avg LTV</div>
+              <div class="stat-value">58.3%</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Default Rate</div>
+              <div class="stat-value">0.8%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Portfolio Health Trend -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Portfolio Health Trend</h2>
+          <div style="color: #6b7280; font-size: 0.875rem;">90-day historical performance</div>
+        </div>
+        <canvas id="health-trend-chart" style="max-height: 300px;"></canvas>
+      </div>
+      
+      <!-- Weekly Action Digest -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Weekly Action Digest</h2>
+          <div style="color: #6b7280; font-size: 0.875rem;">Prioritized actions for this week</div>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <div style="display: flex; align-items: start; gap: 1rem; padding: 1rem; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 6px;">
+            <div style="flex-shrink: 0; width: 32px; height: 32px; background: #f59e0b; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">!</div>
+            <div style="flex: 1;">
+              <div style="font-weight: 700; color: #92400e; margin-bottom: 0.25rem;">CRITICAL: Follow up with 3 high-risk borrowers</div>
+              <div style="color: #78350f; font-size: 0.875rem;">Ray Henderson, Mitchell Farms, Davis Grain Co — Default probability &gt;14%</div>
+            </div>
+          </div>
+          
+          <div style="display: flex; align-items: start; gap: 1rem; padding: 1rem; background: #fef2f2; border-left: 4px solid #dc2626; border-radius: 6px;">
+            <div style="flex-shrink: 0; width: 32px; height: 32px; background: #dc2626; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">📉</div>
+            <div style="flex: 1;">
+              <div style="font-weight: 700; color: #991b1b; margin-bottom: 0.25rem;">Monitor cotton price volatility</div>
+              <div style="color: #7f1d1d; font-size: 0.875rem;">5 loans affected by -2.8% cotton price decline this quarter</div>
+            </div>
+          </div>
+          
+          <div style="display: flex; align-items: start; gap: 1rem; padding: 1rem; background: #ecfdf5; border-left: 4px solid #10b981; border-radius: 6px;">
+            <div style="flex-shrink: 0; width: 32px; height: 32px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">📍</div>
+            <div style="flex: 1;">
+              <div style="font-weight: 700; color: #065f46; margin-bottom: 0.25rem;">Schedule county outreach in Scott County</div>
+              <div style="color: #064e3b; font-size: 0.875rem;">12 active loans, 3 flagged as at-risk — proactive relationship building</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- At-Risk Loans -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">At-Risk Loans</h2>
+          <div style="color: #6b7280; font-size: 0.875rem;">
+            8 loans requiring attention • Click any card for AI analysis
+          </div>
+        </div>
+        
+        <div class="loans-grid" id="loans-grid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- MARKET INTELLIGENCE TAB -->
+    <div id="market" class="tab-panel" role="tabpanel" aria-labelledby="tab-market">
+      
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Current Commodity Prices</h2>
+          <div style="color: #6b7280; font-size: 0.875rem;">Last updated: Today</div>
+        </div>
+        
+        <div class="grid-4" id="commodity-grid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+      
+      <!-- Price Trend Charts -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Price Trends</h2>
+          <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+            <span style="color: #6b7280; font-size: 0.875rem;">View:</span>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="period-btn active" data-period="30">30 days</button>
+              <button class="period-btn" data-period="60">60 days</button>
+              <button class="period-btn" data-period="90">90 days</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="grid-2">
+          <canvas id="cotton-chart" style="max-height: 250px;"></canvas>
+          <canvas id="soybeans-chart" style="max-height: 250px;"></canvas>
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- GEOGRAPHIC TAB -->
+    <div id="geographic" class="tab-panel" role="tabpanel" aria-labelledby="tab-geographic">
+      
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">County Risk Heatmap</h2>
+          <div style="color: #6b7280; font-size: 0.875rem;">Southeast Missouri - 10 counties</div>
+        </div>
+        
+        <div id="county-map"></div>
+      </div>
+      
+    </div>
+    
+    <!-- EXECUTIVE SUMMARY TAB -->
+    <div id="executive" class="tab-panel" role="tabpanel" aria-labelledby="tab-executive">
+      
+      <!-- Patronage Banner -->
+      <div class="patronage-banner">
+        <div class="patronage-value">$9.1M</div>
+        <div class="patronage-label">Record Patronage Distribution 2024</div>
+      </div>
+      
+      <!-- Portfolio Snapshot -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Portfolio Snapshot</h2>
+        </div>
+        
+        <div class="grid-3">
+          <div class="stat-card">
+            <div class="stat-label">Active Loans</div>
+            <div class="stat-value">$45.2M</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Borrowers</div>
+            <div class="stat-value">100</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Watch List</div>
+            <div class="stat-value">8 (8%)</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Business Value -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Business Value</h2>
+        </div>
+        
+        <ul style="list-style: none; padding: 0;">
+          <li style="padding: 1rem 0; border-bottom: 1px solid #f3f4f6;">
+            <div style="font-weight: 600; color: #111827; margin-bottom: 0.25rem;">40-60% NPA Reduction</div>
+            <div style="color: #6b7280; font-size: 0.875rem;">Through early intervention and proactive outreach</div>
+          </li>
+          <li style="padding: 1rem 0; border-bottom: 1px solid #f3f4f6;">
+            <div style="font-weight: 600; color: #111827; margin-bottom: 0.25rem;">3-12 Month Early Warning</div>
+            <div style="color: #6b7280; font-size: 0.875rem;">AI predicts defaults before they occur</div>
+          </li>
+          <li style="padding: 1rem 0;">
+            <div style="font-weight: 600; color: #111827; margin-bottom: 0.25rem;">One Prevented Default = ROI</div>
+            <div style="color: #6b7280; font-size: 0.875rem;">Single $250K default prevention covers system cost</div>
+          </li>
+        </ul>
+      </div>
+      
+      <button class="btn" onclick="exportPDF()">📄 Export PDF Report</button>
+      
+    </div>
+    
+  </main>
+  
+  <!-- AI Risk Explainer Modal -->
+  <div id="risk-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">AI Risk Analysis</h3>
+        <button class="modal-close" onclick="closeModal()" aria-label="Close modal">×</button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <script>
+    // Demo Data
+    const atRiskLoans = [
+      { name: "Donna Mabry", amount: "$248K", risk: "HIGH", county: "Scott", crop: "Cotton", dscr: 1.18, ltv: 72, defaultProb: 12 },
+      { name: "Ray Henderson", amount: "$620K", risk: "CRITICAL", county: "Cape Girardeau", crop: "Soybeans", dscr: 1.05, ltv: 85, defaultProb: 24 },
+      { name: "Mitchell Farms", amount: "$185K", risk: "HIGH", county: "Scott", crop: "Corn", dscr: 1.22, ltv: 68, defaultProb: 14 },
+      { name: "Sarah Thompson", amount: "$412K", risk: "MODERATE", county: "Mississippi", crop: "Cotton", dscr: 1.28, ltv: 62, defaultProb: 9 },
+      { name: "Davis Grain Co", amount: "$890K", risk: "HIGH", county: "Stoddard", crop: "Soybeans", dscr: 1.15, ltv: 74, defaultProb: 16 },
+      { name: "Johnson Acres", amount: "$325K", risk: "MODERATE", county: "New Madrid", crop: "Wheat", dscr: 1.32, ltv: 58, defaultProb: 7 },
+      { name: "Riley Farms", amount: "$475K", risk: "HIGH", county: "Scott", crop: "Cotton", dscr: 1.19, ltv: 71, defaultProb: 13 },
+      { name: "Taylor Livestock", amount: "$560K", risk: "MODERATE", county: "Bollinger", crop: "Mixed", dscr: 1.29, ltv: 60, defaultProb: 8 },
+    ];
+    
+    const commodities = [
+      { name: "Cotton", price: "68.42¢/lb", change: -2.8, unit: "¢/lb" },
+      { name: "Soybeans", price: "$10.15/bu", change: -1.2, unit: "$/bu" },
+      { name: "Corn", price: "$4.28/bu", change: 0.5, unit: "$/bu" },
+      { name: "Wheat", price: "$5.82/bu", change: 1.3, unit: "$/bu" },
+    ];
+    
+    const counties = [
+      { name: "Scott County", lat: 37.1, lng: -89.5, risk: "MODERATE", loans: 12, amount: "$8.2M" },
+      { name: "Cape Girardeau", lat: 37.3, lng: -89.7, risk: "LOW", loans: 15, amount: "$9.5M" },
+      { name: "Mississippi County", lat: 36.8, lng: -89.3, risk: "MODERATE", loans: 8, amount: "$5.1M" },
+      { name: "Stoddard County", lat: 36.9, lng: -89.9, risk: "HIGH", loans: 10, amount: "$6.8M" },
+      { name: "New Madrid County", lat: 36.6, lng: -89.6, risk: "MODERATE", loans: 9, amount: "$4.9M" },
+    ];
+    
+    // Populate At-Risk Loans Cards
+    const loansGrid = document.getElementById('loans-grid');
+    atRiskLoans.forEach(loan => {
+      const card = document.createElement('div');
+      card.className = 'loan-card';
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-label', `View AI risk analysis for ${loan.name}, ${loan.amount} loan, ${loan.risk} risk level`);
+      card.innerHTML = `
+        <div class="loan-header">
+          <div class="loan-name">${loan.name}</div>
+          <div class="loan-amount">${loan.amount}</div>
+        </div>
+        <span class="badge badge-${loan.risk.toLowerCase()}" role="status">${loan.risk} RISK</span>
+        <div class="loan-details">
+          <div class="loan-detail">
+            <div class="loan-detail-label">County</div>
+            <div class="loan-detail-value">${loan.county}</div>
+          </div>
+          <div class="loan-detail">
+            <div class="loan-detail-label">Primary Crop</div>
+            <div class="loan-detail-value">${loan.crop}</div>
+          </div>
+          <div class="loan-detail">
+            <div class="loan-detail-label">DSCR</div>
+            <div class="loan-detail-value">${loan.dscr}</div>
+          </div>
+          <div class="loan-detail">
+            <div class="loan-detail-label">LTV</div>
+            <div class="loan-detail-value">${loan.ltv}%</div>
+          </div>
+        </div>
+      `;
+      card.onclick = () => openModal(loan);
+      card.onkeydown = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openModal(loan);
+        }
+      };
+      loansGrid.appendChild(card);
+    });
+    
+    // Populate Commodities
+    const commodityGrid = document.getElementById('commodity-grid');
+    commodities.forEach(commodity => {
+      const card = document.createElement('div');
+      card.className = 'commodity-card';
+      card.innerHTML = `
+        <div class="commodity-header">
+          <div class="commodity-name">${commodity.name}</div>
+        </div>
+        <div class="commodity-price">${commodity.price}</div>
+        <div class="commodity-change ${commodity.change < 0 ? 'negative' : 'positive'}">
+          ${commodity.change > 0 ? '↗' : '↘'} ${Math.abs(commodity.change)}%
+        </div>
+      `;
+      commodityGrid.appendChild(card);
+    });
+    
+    // Tab Navigation
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const targetTab = tab.dataset.tab;
+        
+        // Update active tab
+        document.querySelectorAll('.tab').forEach(t => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+        
+        // Update active panel
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById(targetTab).classList.add('active');
+        
+        // Initialize map if geographic tab is opened
+        if (targetTab === 'geographic' && !window.mapInitialized) {
+          initMap();
+        }
+        
+        // Initialize commodity charts if market tab is opened
+        if (targetTab === 'market' && !chartsInitialized && typeof Chart !== 'undefined') {
+          initCommodityCharts(currentPeriod);
+          chartsInitialized = true;
+        }
+      });
+      
+      // Keyboard navigation for tabs
+      tab.addEventListener('keydown', (e) => {
+        const tabs = Array.from(document.querySelectorAll('.tab'));
+        const currentIndex = tabs.indexOf(tab);
+        
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          const nextIndex = (currentIndex + 1) % tabs.length;
+          tabs[nextIndex].click();
+          tabs[nextIndex].focus();
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          const prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+          tabs[prevIndex].click();
+          tabs[prevIndex].focus();
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          tabs[0].click();
+          tabs[0].focus();
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          tabs[tabs.length - 1].click();
+          tabs[tabs.length - 1].focus();
+        }
+      });
+    });
+    
+    // Modal Functions
+    function openModal(loan) {
+      const modal = document.getElementById('risk-modal');
+      const title = document.getElementById('modal-title');
+      const body = document.getElementById('modal-body');
+      
+      title.textContent = `AI Risk Analysis: ${loan.name}`;
+      
+      body.innerHTML = `
+        <div style="margin-bottom: 1.5rem;">
+          <div style="font-weight: 600; margin-bottom: 0.5rem;">Default Probability Forecast</div>
+          <div style="display: flex; gap: 2rem; margin-bottom: 1rem;">
+            <div>
+              <div style="color: #6b7280; font-size: 0.875rem;">6 Months</div>
+              <div style="font-size: 1.5rem; font-weight: 700; color: #dc2626;">${loan.defaultProb}%</div>
+            </div>
+            <div>
+              <div style="color: #6b7280; font-size: 0.875rem;">12 Months</div>
+              <div style="font-size: 1.5rem; font-weight: 700; color: #dc2626;">${loan.defaultProb + 6}%</div>
+            </div>
+          </div>
+        </div>
+        
+        <div style="margin-bottom: 1.5rem;">
+          <div style="font-weight: 600; margin-bottom: 0.5rem;">Key Risk Factors</div>
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid #f3f4f6;">
+              📉 ${loan.crop} prices down 2.8% this quarter
+            </li>
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid #f3f4f6;">
+              📊 DSCR of ${loan.dscr} trending below 1.25 threshold
+            </li>
+            <li style="padding: 0.5rem 0;">
+              📍 ${loan.county} County seeing elevated delinquency rates
+            </li>
+          </ul>
+        </div>
+        
+        <div style="margin-bottom: 1.5rem;">
+          <div style="font-weight: 600; margin-bottom: 0.5rem;">Financial Metrics</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div style="background: #f9fafb; padding: 0.75rem; border-radius: 6px;">
+              <div style="color: #6b7280; font-size: 0.875rem;">DSCR</div>
+              <div style="font-size: 1.25rem; font-weight: 700;">${loan.dscr}</div>
+            </div>
+            <div style="background: #f9fafb; padding: 0.75rem; border-radius: 6px;">
+              <div style="color: #6b7280; font-size: 0.875rem;">LTV</div>
+              <div style="font-size: 1.25rem; font-weight: 700;">${loan.ltv}%</div>
+            </div>
+          </div>
+        </div>
+        
+        <div style="background: #ecfdf5; border: 1px solid #10b981; border-radius: 6px; padding: 1rem;">
+          <div style="font-weight: 600; color: #065f46; margin-bottom: 0.5rem;">✅ Recommended Actions</div>
+          <ol style="margin: 0; padding-left: 1.25rem; color: #065f46;">
+            <li>Proactive outreach within 7 days</li>
+            <li>Schedule cash flow review meeting</li>
+            <li>Consider loan restructure discussion</li>
+          </ol>
+        </div>
+      `;
+      
+      modal.classList.add('active');
+    }
+    
+    function closeModal() {
+      document.getElementById('risk-modal').classList.remove('active');
+    }
+    
+    // Close modal on background click
+    document.getElementById('risk-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'risk-modal') closeModal();
+    });
+    
+    // Initialize Portfolio Health Trend Chart
+    function initHealthTrendChart() {
+      const ctx = document.getElementById('health-trend-chart');
+      if (!ctx) return;
+      
+      // Generate 90 days of data (trending upward from 68 to 73)
+      const labels = [];
+      const data = [];
+      const today = new Date();
+      
+      for (let i = 89; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(date.getDate() - i);
+        labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+        
+        // Generate trend: start at 68, end at 73, with some noise
+        const baseValue = 68 + ((89 - i) / 89) * 5;
+        const noise = (Math.random() - 0.5) * 2;
+        data.push(Math.round((baseValue + noise) * 10) / 10);
+      }
+      
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Portfolio Health Score',
+            data: data,
+            borderColor: '#52812c',
+            backgroundColor: 'rgba(82, 129, 44, 0.1)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 0,
+            pointHoverRadius: 6,
+            pointHoverBackgroundColor: '#52812c',
+            pointHoverBorderColor: '#fff',
+            pointHoverBorderWidth: 2,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          interaction: {
+            intersect: false,
+            mode: 'index',
+          },
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              titleFont: { size: 14, weight: '600' },
+              bodyFont: { size: 13 },
+              padding: 12,
+              displayColors: false,
+              callbacks: {
+                title: function(context) {
+                  return context[0].label;
+                },
+                label: function(context) {
+                  return 'Health Score: ' + context.parsed.y;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: {
+                maxRotation: 0,
+                autoSkipPadding: 20,
+                font: { size: 11 }
+              }
+            },
+            y: {
+              min: 60,
+              max: 80,
+              grid: { color: 'rgba(0, 0, 0, 0.05)' },
+              ticks: {
+                font: { size: 11 },
+                callback: function(value) {
+                  return value;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+    
+    // Initialize chart on page load
+    if (typeof Chart !== 'undefined') {
+      initHealthTrendChart();
+    }
+    
+    // Commodity Price Charts
+    let cottonChart, soybeansChart;
+    let currentPeriod = 30;
+    
+    function generateCommodityData(basePrice, volatility, days, trend) {
+      const data = [];
+      for (let i = days - 1; i >= 0; i--) {
+        const trendValue = (days - 1 - i) / days * trend;
+        const noise = (Math.random() - 0.5) * volatility;
+        data.push(Math.round((basePrice + trendValue + noise) * 100) / 100);
+      }
+      return data.reverse();
+    }
+    
+    function initCommodityCharts(period) {
+      const labels = [];
+      const today = new Date();
+      
+      for (let i = period - 1; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(date.getDate() - i);
+        labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+      }
+      
+      // Cotton chart (declining)
+      const cottonCtx = document.getElementById('cotton-chart');
+      if (cottonCtx) {
+        if (cottonChart) cottonChart.destroy();
+        
+        cottonChart = new Chart(cottonCtx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Cotton Price (¢/lb)',
+              data: generateCommodityData(70.2, 1.2, period, -1.8),
+              borderColor: '#dc2626',
+              backgroundColor: 'rgba(220, 38, 38, 0.1)',
+              fill: true,
+              tension: 0.3,
+              pointRadius: 0,
+              pointHoverRadius: 5,
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: { display: false },
+              title: {
+                display: true,
+                text: 'Cotton (-2.8%)',
+                font: { size: 14, weight: '700' },
+                color: '#111827',
+                align: 'start',
+                padding: { bottom: 16 }
+              },
+              tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                callbacks: {
+                  label: function(context) {
+                    return context.parsed.y.toFixed(2) + '¢/lb';
+                  }
+                }
+              }
+            },
+            scales: {
+              x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkipPadding: 15, font: { size: 10 } } },
+              y: { grid: { color: 'rgba(0, 0, 0, 0.05)' }, ticks: { font: { size: 10 }, callback: v => v.toFixed(1) } }
+            }
+          }
+        });
+      }
+      
+      // Soybeans chart (declining)
+      const soybeansCtx = document.getElementById('soybeans-chart');
+      if (soybeansCtx) {
+        if (soybeansChart) soybeansChart.destroy();
+        
+        soybeansChart = new Chart(soybeansCtx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Soybeans Price ($/bu)',
+              data: generateCommodityData(10.27, 0.15, period, -0.12),
+              borderColor: '#f59e0b',
+              backgroundColor: 'rgba(245, 158, 11, 0.1)',
+              fill: true,
+              tension: 0.3,
+              pointRadius: 0,
+              pointHoverRadius: 5,
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: { display: false },
+              title: {
+                display: true,
+                text: 'Soybeans (-1.2%)',
+                font: { size: 14, weight: '700' },
+                color: '#111827',
+                align: 'start',
+                padding: { bottom: 16 }
+              },
+              tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                callbacks: {
+                  label: function(context) {
+                    return '$' + context.parsed.y.toFixed(2) + '/bu';
+                  }
+                }
+              }
+            },
+            scales: {
+              x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkipPadding: 15, font: { size: 10 } } },
+              y: { grid: { color: 'rgba(0, 0, 0, 0.05)' }, ticks: { font: { size: 10 }, callback: v => '$' + v.toFixed(2) } }
+            }
+          }
+        });
+      }
+    }
+    
+    // Initialize charts when Market tab is opened
+    let chartsInitialized = false;
+    
+    // Period toggle buttons
+    document.querySelectorAll('.period-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentPeriod = parseInt(btn.dataset.period);
+        document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        initCommodityCharts(currentPeriod);
+      });
+    });
+    
+    // Initialize Map
+    function initMap() {
+      const map = L.map('county-map').setView([37.0, -89.6], 9);
+      
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+      
+      counties.forEach(county => {
+        const color = county.risk === 'HIGH' ? 'red' : county.risk === 'MODERATE' ? 'orange' : 'green';
+        
+        const marker = L.circleMarker([county.lat, county.lng], {
+          radius: 10,
+          fillColor: color,
+          color: '#fff',
+          weight: 2,
+          opacity: 1,
+          fillOpacity: 0.7
+        }).addTo(map);
+        
+        marker.bindPopup(`
+          <strong>${county.name}</strong><br>
+          Risk: <strong>${county.risk}</strong><br>
+          ${county.loans} loans, ${county.amount}
+        `);
+      });
+      
+      window.mapInitialized = true;
+    }
+    
+    // PDF Export
+    function exportPDF() {
+      alert('PDF Export: In production, this would generate a downloadable PDF report of the Executive Summary using jsPDF or similar library.');
+    }
+  </script>
+  
+  <!-- Footer -->
+  <footer>
+    <p>
+      Farm Credit Southeast Missouri · <a href="https://farmcreditsemo.com" target="_blank">farmcreditsemo.com</a> · (877) 730-7327<br>
+      Equal Housing Lender · Equal Credit Opportunity · Equal Opportunity Provider<br><br>
+      <a href="index.html">← Back to Demo Suite</a>
+    </p>
+    
+    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+      <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: linear-gradient(135deg, #d1fae5, #ecfdf5); border: 2px solid #10b981; border-radius: 8px; font-size: 0.875rem; font-weight: 600; color: #065f46;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <span>WCAG 2.1 AA Compliant</span>
+      </div>
+      
+      <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: linear-gradient(135deg, #dbeafe, #eff6ff); border: 2px solid #3b82f6; border-radius: 8px; font-size: 0.875rem; font-weight: 600; color: #1e40af;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span>Keyboard Accessible</span>
+      </div>
+      
+      <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: linear-gradient(135deg, #fef3c7, #fffbeb); border: 2px solid #f59e0b; border-radius: 8px; font-size: 0.875rem; font-weight: 600; color: #92400e;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+        <span>Screen Reader Friendly</span>
+      </div>
+    </div>
+    
+    <p style="margin-top: 1rem; font-size: 0.75rem; color: #9ca3af;">
+      Built with accessibility in mind · Tested with NVDA, VoiceOver, and Lighthouse
+    </p>
+  </footer>
+<!-- Farm Credit AI Assistant Widget - Add before </body> -->
+<div id="fc-chatbot-widget">
+  <!-- Chat Button -->
+  <button id="fc-chat-button" aria-label="Open Farm Credit AI Assistant" style="position:fixed;bottom:24px;right:24px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#345220,#52812c);border:none;box-shadow:0 4px 16px rgba(82,129,44,0.4);cursor:pointer;z-index:9999;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+  </button>
+
+  <!-- Chat Modal -->
+  <div id="fc-chat-modal" role="dialog" aria-labelledby="fc-chat-title" aria-modal="true" style="position:fixed;bottom:100px;right:24px;width:380px;max-width:calc(100vw - 48px);height:550px;max-height:calc(100vh - 150px);background:white;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2);z-index:10000;display:none;flex-direction:column;overflow:hidden">
+    
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#345220,#52812c);color:white;padding:16px 20px;display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px">🤖</div>
+        <div>
+          <div id="fc-chat-title" style="font-weight:700;font-size:16px">Farm Credit AI Assistant</div>
+          <div style="font-size:12px;opacity:0.9">Online · Ready to help</div>
+        </div>
+      </div>
+      <button id="fc-chat-close" aria-label="Close chat" style="background:none;border:none;color:white;font-size:24px;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:4px;transition:background 0.2s">×</button>
+    </div>
+
+    <!-- Messages -->
+    <div id="fc-chat-messages" style="flex:1;overflow-y:auto;padding:20px;background:#f9fafb;display:flex;flex-direction:column;gap:12px">
+      <!-- Welcome message -->
+      <div class="fc-chat-message-bot">
+        <div style="background:white;padding:12px 16px;border-radius:12px 12px 12px 4px;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
+          <div style="font-size:14px;line-height:1.5">
+            👋 Hi! I'm your Farm Credit AI Assistant. I can help you with:<br><br>
+            • <strong>Patronage</strong> - Check your dividend estimates<br>
+            • <strong>Loans</strong> - Application status & requirements<br>
+            • <strong>AgSunrise</strong> - Young farmer programs<br>
+            • <strong>Account</strong> - General questions<br><br>
+            What can I help you with today?
+          </div>
+        </div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:4px;padding-left:4px">Just now</div>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div style="padding:16px;background:white;border-top:1px solid #e5e7eb">
+      <div style="display:flex;gap:8px">
+        <input id="fc-chat-input" type="text" placeholder="Type your message..." aria-label="Chat message" style="flex:1;padding:12px 16px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;outline:none" />
+        <button id="fc-chat-send" aria-label="Send message" style="background:linear-gradient(135deg,#345220,#52812c);color:white;border:none;width:44px;height:44px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity 0.2s">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Quick Actions -->
+      <div id="fc-quick-actions" style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="fc-quick-btn" data-message="What is my patronage dividend?">💰 Patronage</button>
+        <button class="fc-quick-btn" data-message="Check my loan application status">📋 Loan Status</button>
+        <button class="fc-quick-btn" data-message="Tell me about AgSunrise">🌱 AgSunrise</button>
+        <button class="fc-quick-btn" data-message="I need help with my account">❓ Help</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Chat button hover */
+#fc-chat-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(82,129,44,0.5);
+}
+
+#fc-chat-button:active {
+  transform: scale(1.05);
+}
+
+#fc-chat-close:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Quick action buttons */
+.fc-quick-btn {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.fc-quick-btn:hover {
+  background: #e5e7eb;
+  border-color: #52812c;
+}
+
+/* Chat input focus */
+#fc-chat-input:focus {
+  border-color: #52812c;
+  box-shadow: 0 0 0 3px rgba(82,129,44,0.1);
+}
+
+/* Scrollbar */
+#fc-chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+#fc-chat-messages::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+#fc-chat-messages::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Message styles */
+.fc-chat-message-user {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.fc-chat-message-user > div:first-child {
+  background: linear-gradient(135deg,#345220,#52812c);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 12px 12px 4px 12px;
+  max-width: 80%;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.fc-chat-message-bot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  #fc-chat-button {
+    bottom: 16px;
+    right: 16px;
+    width: 56px;
+    height: 56px;
+  }
+  
+  #fc-chat-modal {
+    bottom: 88px;
+    right: 16px;
+    left: 16px;
+    width: auto;
+    max-width: none;
+  }
+}
+
+/* Typing indicator */
+.fc-typing {
+  display: flex;
+  gap: 4px;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 12px 12px 12px 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  width: fit-content;
+}
+
+.fc-typing span {
+  width: 8px;
+  height: 8px;
+  background: #9ca3af;
+  border-radius: 50%;
+  animation: fc-typing-animation 1.4s infinite;
+}
+
+.fc-typing span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.fc-typing span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes fc-typing-animation {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-8px);
+  }
+}
+</style>
+
+<script>
+(function() {
+  // Chat state
+  let chatOpen = false;
+  
+  // DOM elements
+  const chatButton = document.getElementById('fc-chat-button');
+  const chatModal = document.getElementById('fc-chat-modal');
+  const chatClose = document.getElementById('fc-chat-close');
+  const chatInput = document.getElementById('fc-chat-input');
+  const chatSend = document.getElementById('fc-chat-send');
+  const chatMessages = document.getElementById('fc-chat-messages');
+  const quickActions = document.querySelectorAll('.fc-quick-btn');
+  
+  // Demo responses
+  const responses = {
+    'patronage': 'Your estimated 2024 patronage dividend is <strong>$3,250</strong> based on your current loan balance. This is part of our record <strong>$9.1M distribution</strong>! 💰',
+    'loan': 'Your loan application <strong>#AG2024-0157</strong> is currently in <strong>Underwriting Review</strong>. Expected decision within 5-7 business days. You\'ll receive email/SMS updates. 📋',
+    'agsunrise': '<strong>AgSunrise</strong> is our young & beginning farmer program! It includes:<br>• Reduced interest rates<br>• Flexible terms<br>• Mentorship matching<br>• Free financial education<br><br>Apply at <a href="agsunrise/index.html" style="color:#52812c">farmcreditsemo.com/agsunrise</a> 🌱',
+    'help': 'I can help with:<br>• Account questions<br>• Payment schedules<br>• Document uploads<br>• Contact info updates<br><br>Or call us at <strong>(877) 730-7327</strong> for immediate assistance. ❓',
+    'default': 'Thanks for your question! For specific account details, please call us at <strong>(877) 730-7327</strong> or email <strong>support@farmcreditsemo.com</strong>. Our team is ready to help! 😊'
+  };
+  
+  // Toggle chat
+  function toggleChat() {
+    chatOpen = !chatOpen;
+    chatModal.style.display = chatOpen ? 'flex' : 'none';
+    if (chatOpen) {
+      chatInput.focus();
+      // Hide quick actions after first open (keep it clean)
+      setTimeout(() => {
+        const quickActionsContainer = document.getElementById('fc-quick-actions');
+        if (quickActionsContainer && chatMessages.children.length > 1) {
+          quickActionsContainer.style.display = 'none';
+        }
+      }, 100);
+    }
+  }
+  
+  // Add message
+  function addMessage(text, isUser = false) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = isUser ? 'fc-chat-message-user' : 'fc-chat-message-bot';
+    
+    const time = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    
+    if (isUser) {
+      msgDiv.innerHTML = `
+        <div>${text}</div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:4px;padding-right:4px">${time}</div>
+      `;
+    } else {
+      msgDiv.innerHTML = `
+        <div style="background:white;padding:12px 16px;border-radius:12px 12px 12px 4px;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
+          <div style="font-size:14px;line-height:1.5">${text}</div>
+        </div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:4px;padding-left:4px">${time}</div>
+      `;
+    }
+    
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+  
+  // Show typing indicator
+  function showTyping() {
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'fc-chat-message-bot';
+    typingDiv.id = 'fc-typing-indicator';
+    typingDiv.innerHTML = '<div class="fc-typing"><span></span><span></span><span></span></div>';
+    chatMessages.appendChild(typingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+  
+  // Remove typing indicator
+  function hideTyping() {
+    const typingIndicator = document.getElementById('fc-typing-indicator');
+    if (typingIndicator) typingIndicator.remove();
+  }
+  
+  // Get response
+  function getResponse(message) {
+    const msg = message.toLowerCase();
+    
+    if (msg.includes('patronage') || msg.includes('dividend') || msg.includes('refund')) {
+      return responses.patronage;
+    } else if (msg.includes('loan') || msg.includes('application') || msg.includes('status')) {
+      return responses.loan;
+    } else if (msg.includes('agsunrise') || msg.includes('young farmer') || msg.includes('beginning')) {
+      return responses.agsunrise;
+    } else if (msg.includes('help') || msg.includes('support') || msg.includes('account')) {
+      return responses.help;
+    } else {
+      return responses.default;
+    }
+  }
+  
+  // Send message
+  function sendMessage() {
+    const message = chatInput.value.trim();
+    if (!message) return;
+    
+    // Add user message
+    addMessage(message, true);
+    chatInput.value = '';
+    
+    // Show typing
+    showTyping();
+    
+    // Simulate AI response delay
+    setTimeout(() => {
+      hideTyping();
+      const response = getResponse(message);
+      addMessage(response);
+    }, 800 + Math.random() * 400); // 800-1200ms delay
+  }
+  
+  // Event listeners
+  chatButton.addEventListener('click', toggleChat);
+  chatClose.addEventListener('click', toggleChat);
+  chatSend.addEventListener('click', sendMessage);
+  
+  chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+  
+  quickActions.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const message = btn.getAttribute('data-message');
+      chatInput.value = message;
+      sendMessage();
+    });
+  });
+  
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && chatOpen) {
+      toggleChat();
+    }
+  });
+  
+  // Close modal when clicking outside
+  chatModal.addEventListener('click', (e) => {
+    if (e.target === chatModal) {
+      toggleChat();
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgSunrise Education Hub | Farm Credit SEMO</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #f4f7f0;
+      color: #1e3013;
+    }
+
+    header {
+      background: linear-gradient(135deg, #345220 0%, #52812c 60%, #426824 100%);
+      color: white;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .header-left h1 {
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .header-left p {
+      opacity: 0.85;
+      font-size: 15px;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 12px;
+    }
+
+    .progress-badge {
+      background: rgba(139, 195, 74, 0.2);
+      border: 1px solid rgba(139, 195, 74, 0.6);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #8bc34a;
+      letter-spacing: 0.5px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 32px;
+      border-bottom: 2px solid #e5e7eb;
+      overflow-x: auto;
+    }
+
+    .tab {
+      padding: 12px 24px;
+      border: none;
+      background: none;
+      color: #6b7280;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .tab:hover {
+      color: #52812c;
+    }
+
+    .tab.active {
+      color: #52812c;
+      border-bottom-color: #52812c;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .section-header {
+      margin-bottom: 24px;
+    }
+
+    .section-header h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #345220;
+      margin-bottom: 8px;
+    }
+
+    .section-header p {
+      color: #6b7280;
+      font-size: 15px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-thumbnail {
+      width: 100%;
+      height: 180px;
+      background: linear-gradient(135deg, #345220, #52812c);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      position: relative;
+    }
+
+    .play-button {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: #52812c;
+    }
+
+    .card-content {
+      padding: 20px;
+    }
+
+    .card-meta {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .card-meta span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #1e3013;
+      margin-bottom: 8px;
+    }
+
+    .card-description {
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid #f3f4f6;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge.new {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge.popular {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .badge.required {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .progress-bar {
+      background: #e5e7eb;
+      height: 6px;
+      border-radius: 3px;
+      overflow: hidden;
+      flex: 1;
+      max-width: 120px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #52812c;
+      border-radius: 3px;
+      transition: width 0.3s;
+    }
+
+    .course-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      border-left: 4px solid #52812c;
+      margin-bottom: 16px;
+    }
+
+    .course-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+
+    .course-info h3 {
+      font-size: 19px;
+      font-weight: 700;
+      color: #1e3013;
+      margin-bottom: 6px;
+    }
+
+    .course-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .course-status {
+      text-align: right;
+    }
+
+    .course-progress-text {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+
+    .course-progress-bar {
+      width: 120px;
+      height: 8px;
+      background: #e5e7eb;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .lessons-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .lesson {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: #f9fafb;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .lesson:hover {
+      background: #f2f7ed;
+    }
+
+    .lesson-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .lesson.completed .lesson-icon {
+      background: #52812c;
+      color: white;
+    }
+
+    .lesson.active .lesson-icon {
+      background: #8bc34a;
+      color: white;
+    }
+
+    .lesson-info {
+      flex: 1;
+    }
+
+    .lesson-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1e3013;
+    }
+
+    .lesson-duration {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 2px;
+    }
+
+    .resource-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .resource-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: white;
+      padding: 16px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .resource-item:hover {
+      transform: translateX(4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .resource-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #f2f7ed, #e5f0d8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .resource-info {
+      flex: 1;
+    }
+
+    .resource-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1e3013;
+      margin-bottom: 4px;
+    }
+
+    .resource-description {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .download-button {
+      padding: 8px 16px;
+      background: #52812c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .download-button:hover {
+      background: #426824;
+    }
+
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div class="header-left">
+        <h1>📚 AgSunrise Education Hub</h1>
+        <p>Learn the skills to build a successful farm business</p>
+      </div>
+      <div class="header-right">
+        <div class="progress-badge">3/10 Videos Watched</div>
+        <div class="progress-badge">1/5 Courses Started</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="tabs">
+      <button class="tab active" data-tab="videos">📹 Video Library</button>
+      <button class="tab" data-tab="courses">🎓 Courses</button>
+      <button class="tab" data-tab="resources">📄 Templates & Resources</button>
+    </div>
+
+    <!-- Video Library Tab -->
+    <div class="tab-content active" id="videos">
+      <div class="section-header">
+        <h2>Video Library</h2>
+        <p>Short, practical videos to help you succeed</p>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="card-thumbnail">
+            📊
+            <div class="play-button">▶</div>
+          </div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span>⏱️ 12 min</span>
+              <span>👀 1,247 views</span>
+            </div>
+            <div class="card-title">Understanding Your Balance Sheet</div>
+            <div class="card-description">Learn how to read and interpret your farm's balance sheet to make better financial decisions.</div>
+            <div class="card-footer">
+              <span class="badge popular">Popular</span>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 100%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-thumbnail">
+            💰
+            <div class="play-button">▶</div>
+          </div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span>⏱️ 15 min</span>
+              <span>👀 892 views</span>
+            </div>
+            <div class="card-title">Cash Flow Management Basics</div>
+            <div class="card-description">Master the fundamentals of managing cash flow for your farming operation.</div>
+            <div class="card-footer">
+              <span class="badge required">Required</span>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 60%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-thumbnail">
+            📝
+            <div class="play-button">▶</div>
+          </div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span>⏱️ 18 min</span>
+              <span>👀 634 views</span>
+            </div>
+            <div class="card-title">Writing a Winning Business Plan</div>
+            <div class="card-description">Step-by-step guide to creating a farm business plan that gets approved.</div>
+            <div class="card-footer">
+              <span class="badge new">New</span>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-thumbnail">
+            📈
+            <div class="play-button">▶</div>
+          </div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span>⏱️ 10 min</span>
+              <span>👀 1,432 views</span>
+            </div>
+            <div class="card-title">Understanding Commodity Markets</div>
+            <div class="card-description">Learn how commodity prices work and how to protect your operation.</div>
+            <div class="card-footer">
+              <span class="badge popular">Popular</span>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-thumbnail">
+            🌾
+            <div class="play-button">▶</div>
+          </div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span>⏱️ 14 min</span>
+              <span>👀 567 views</span>
+            </div>
+            <div class="card-title">Crop Insurance 101</div>
+            <div class="card-description">Everything you need to know about protecting your crops with insurance.</div>
+            <div class="card-footer">
+              <span class="badge new">New</span>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-thumbnail">
+            🚜
+            <div class="play-button">▶</div>
+          </div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span>⏱️ 16 min</span>
+              <span>👀 743 views</span>
+            </div>
+            <div class="card-title">Equipment Financing Strategies</div>
+            <div class="card-description">Smart ways to finance equipment purchases and manage depreciation.</div>
+            <div class="card-footer">
+              <span class="badge popular">Popular</span>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Courses Tab -->
+    <div class="tab-content" id="courses">
+      <div class="section-header">
+        <h2>Interactive Courses</h2>
+        <p>Complete courses with quizzes and earn certificates</p>
+      </div>
+
+      <div class="course-card">
+        <div class="course-header">
+          <div class="course-info">
+            <h3>🎓 Farm Financial Literacy</h3>
+            <div class="course-meta">
+              <span>📚 5 lessons</span>
+              <span>⏱️ 1.5 hours</span>
+              <span>✅ Certificate included</span>
+            </div>
+          </div>
+          <div class="course-status">
+            <div class="course-progress-text">20% Complete</div>
+            <div class="course-progress-bar">
+              <div class="progress-fill" style="width: 20%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lessons-list">
+          <div class="lesson completed">
+            <div class="lesson-icon">✓</div>
+            <div class="lesson-info">
+              <div class="lesson-title">1. Financial Statements Overview</div>
+              <div class="lesson-duration">18 minutes</div>
+            </div>
+          </div>
+
+          <div class="lesson active">
+            <div class="lesson-icon">▶</div>
+            <div class="lesson-info">
+              <div class="lesson-title">2. Reading Your Balance Sheet</div>
+              <div class="lesson-duration">22 minutes</div>
+            </div>
+          </div>
+
+          <div class="lesson">
+            <div class="lesson-icon">🔒</div>
+            <div class="lesson-info">
+              <div class="lesson-title">3. Income Statements & Profit</div>
+              <div class="lesson-duration">20 minutes</div>
+            </div>
+          </div>
+
+          <div class="lesson">
+            <div class="lesson-icon">🔒</div>
+            <div class="lesson-info">
+              <div class="lesson-title">4. Cash Flow Analysis</div>
+              <div class="lesson-duration">25 minutes</div>
+            </div>
+          </div>
+
+          <div class="lesson">
+            <div class="lesson-icon">🔒</div>
+            <div class="lesson-info">
+              <div class="lesson-title">5. Financial Ratios & Benchmarks</div>
+              <div class="lesson-duration">20 minutes + Quiz</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <div class="course-header">
+          <div class="course-info">
+            <h3>📊 Farm Business Planning</h3>
+            <div class="course-meta">
+              <span>📚 4 lessons</span>
+              <span>⏱️ 2 hours</span>
+              <span>✅ Certificate included</span>
+            </div>
+          </div>
+          <div class="course-status">
+            <div class="course-progress-text">Not Started</div>
+            <div class="course-progress-bar">
+              <div class="progress-fill" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lessons-list">
+          <div class="lesson">
+            <div class="lesson-icon">1</div>
+            <div class="lesson-info">
+              <div class="lesson-title">1. Creating Your Vision & Mission</div>
+              <div class="lesson-duration">25 minutes</div>
+            </div>
+          </div>
+
+          <div class="lesson">
+            <div class="lesson-icon">🔒</div>
+            <div class="lesson-info">
+              <div class="lesson-title">2. Market Analysis & Competition</div>
+              <div class="lesson-duration">30 minutes</div>
+            </div>
+          </div>
+
+          <div class="lesson">
+            <div class="lesson-icon">🔒</div>
+            <div class="lesson-info">
+              <div class="lesson-title">3. Financial Projections</div>
+              <div class="lesson-duration">35 minutes</div>
+            </div>
+          </div>
+
+          <div class="lesson">
+            <div class="lesson-icon">🔒</div>
+            <div class="lesson-info">
+              <div class="lesson-title">4. Putting It All Together</div>
+              <div class="lesson-duration">30 minutes + Quiz</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card">
+        <div class="course-header">
+          <div class="course-info">
+            <h3>🌾 Risk Management for Farmers</h3>
+            <div class="course-meta">
+              <span>📚 3 lessons</span>
+              <span>⏱️ 1 hour</span>
+              <span>✅ Certificate included</span>
+            </div>
+          </div>
+          <div class="course-status">
+            <div class="course-progress-text">Not Started</div>
+            <div class="course-progress-bar">
+              <div class="progress-fill" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lessons-list">
+          <div class="lesson">
+            <div class="lesson-icon">1</div>
+            <div class="lesson-info">
+              <div class="lesson-title">1. Types of Farm Risk</div>
+              <div class="lesson-duration">20 minutes</div>
+            </div>
+          </div>
+
+          <div class="lesson">
+            <div class="lesson-icon">🔒</div>
+            <div class="lesson-info">
+              <div class="lesson-title">2. Insurance Options</div>
+              <div class="lesson-duration">25 minutes</div>
+            </div>
+          </div>
+
+          <div class="lesson">
+            <div class="lesson-icon">🔒</div>
+            <div class="lesson-info">
+              <div class="lesson-title">3. Building Resilience</div>
+              <div class="lesson-duration">20 minutes + Quiz</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resources Tab -->
+    <div class="tab-content" id="resources">
+      <div class="section-header">
+        <h2>Templates & Resources</h2>
+        <p>Downloadable tools to help run your farm business</p>
+      </div>
+
+      <div class="resource-list">
+        <div class="resource-item">
+          <div class="resource-icon">📝</div>
+          <div class="resource-info">
+            <div class="resource-title">Farm Business Plan Template</div>
+            <div class="resource-description">Complete business plan template with examples • Word/PDF • 24 pages</div>
+          </div>
+          <button class="download-button">Download</button>
+        </div>
+
+        <div class="resource-item">
+          <div class="resource-icon">📊</div>
+          <div class="resource-info">
+            <div class="resource-title">Cash Flow Worksheet</div>
+            <div class="resource-description">12-month cash flow projection spreadsheet • Excel • With formulas</div>
+          </div>
+          <button class="download-button">Download</button>
+        </div>
+
+        <div class="resource-item">
+          <div class="resource-icon">💼</div>
+          <div class="resource-info">
+            <div class="resource-title">Budget Planning Tool</div>
+            <div class="resource-description">Enterprise budget template for crop & livestock • Excel • Customizable</div>
+          </div>
+          <button class="download-button">Download</button>
+        </div>
+
+        <div class="resource-item">
+          <div class="resource-icon">📈</div>
+          <div class="resource-info">
+            <div class="resource-title">Financial Ratio Calculator</div>
+            <div class="resource-description">Automated ratio analysis tool with benchmarks • Excel • Interactive</div>
+          </div>
+          <button class="download-button">Download</button>
+        </div>
+
+        <div class="resource-item">
+          <div class="resource-icon">🌾</div>
+          <div class="resource-info">
+            <div class="resource-title">Crop Insurance Guide</div>
+            <div class="resource-description">Comprehensive guide to federal crop insurance • PDF • 16 pages</div>
+          </div>
+          <button class="download-button">Download</button>
+        </div>
+
+        <div class="resource-item">
+          <div class="resource-icon">📋</div>
+          <div class="resource-info">
+            <div class="resource-title">Loan Application Checklist</div>
+            <div class="resource-description">Everything you need to apply for farm credit • PDF • Printable</div>
+          </div>
+          <button class="download-button">Download</button>
+        </div>
+
+        <div class="resource-item">
+          <div class="resource-icon">🔗</div>
+          <div class="resource-info">
+            <div class="resource-title">USDA Resources Directory</div>
+            <div class="resource-description">Links to government programs & grants • PDF • Updated 2026</div>
+          </div>
+          <button class="download-button">Download</button>
+        </div>
+
+        <div class="resource-item">
+          <div class="resource-icon">📖</div>
+          <div class="resource-info">
+            <div class="resource-title">Beginning Farmer Handbook</div>
+            <div class="resource-description">Complete guide to starting a farm business • PDF • 48 pages</div>
+          </div>
+          <button class="download-button">Download</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const targetTab = tab.getAttribute('data-tab');
+        
+        // Update active tab
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        // Update active content
+        document.querySelectorAll('.tab-content').forEach(content => {
+          content.classList.remove('active');
+        });
+        document.getElementById(targetTab).classList.add('active');
+      });
+    });
+
+    // Video card clicks
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', () => {
+        alert('Video player would open here in full platform. This is a demo.');
+      });
+    });
+
+    // Lesson clicks
+    document.querySelectorAll('.lesson').forEach(lesson => {
+      lesson.addEventListener('click', () => {
+        if (!lesson.classList.contains('completed')) {
+          alert('Lesson player would open here. This is a demo.');
+        }
+      });
+    });
+
+    // Download buttons
+    document.querySelectorAll('.download-button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const title = btn.parentElement.querySelector('.resource-title').textContent;
+        alert(`Downloading: ${title}\n\nIn the full platform, this would download the actual file.`);
+      });
+    });
+  </script>
+
+  <!-- Include AgBot -->
+  <script src="../chatbot/agbot.js"></script>
+<footer>
+<div style="margin-top:32px;padding-top:24px;border-top:1px solid #e5e7eb;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap">
+  <div style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:linear-gradient(135deg,#d1fae5,#ecfdf5);border:2px solid #10b981;border-radius:8px;font-size:13px;font-weight:600;color:#065f46">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span>WCAG 2.1 AA</span>
+  </div>
+  
+  <div style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:linear-gradient(135deg,#dbeafe,#eff6ff);border:2px solid #3b82f6;border-radius:8px;font-size:13px;font-weight:600;color:#1e40af">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+    </svg>
+    <span>Keyboard Accessible</span>
+  </div>
+  
+  <div style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:linear-gradient(135deg,#fef3c7,#fffbeb);border:2px solid #f59e0b;border-radius:8px;font-size:13px;font-weight:600;color:#92400e">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+      <circle cx="12" cy="12" r="3"></circle>
+    </svg>
+    <span>Screen Reader Friendly</span>
+  </div>
+</div>
+
+<p style="text-align:center;margin-top:16px;font-size:11px;color:#9ca3af">
+  Built with accessibility in mind · Tested with NVDA, VoiceOver, and Lighthouse
+</p>
+
+</footer>
+<!-- Farm Credit AI Assistant Widget - Add before </body> -->
+<div id="fc-chatbot-widget">
+  <!-- Chat Button -->
+  <button id="fc-chat-button" aria-label="Open Farm Credit AI Assistant" style="position:fixed;bottom:24px;right:24px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#345220,#52812c);border:none;box-shadow:0 4px 16px rgba(82,129,44,0.4);cursor:pointer;z-index:9999;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+  </button>
+
+  <!-- Chat Modal -->
+  <div id="fc-chat-modal" role="dialog" aria-labelledby="fc-chat-title" aria-modal="true" style="position:fixed;bottom:100px;right:24px;width:380px;max-width:calc(100vw - 48px);height:550px;max-height:calc(100vh - 150px);background:white;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2);z-index:10000;display:none;flex-direction:column;overflow:hidden">
+    
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#345220,#52812c);color:white;padding:16px 20px;display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px">🤖</div>
+        <div>
+          <div id="fc-chat-title" style="font-weight:700;font-size:16px">Farm Credit AI Assistant</div>
+          <div style="font-size:12px;opacity:0.9">Online · Ready to help</div>
+        </div>
+      </div>
+      <button id="fc-chat-close" aria-label="Close chat" style="background:none;border:none;color:white;font-size:24px;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:4px;transition:background 0.2s">×</button>
+    </div>
+
+    <!-- Messages -->
+    <div id="fc-chat-messages" style="flex:1;overflow-y:auto;padding:20px;background:#f9fafb;display:flex;flex-direction:column;gap:12px">
+      <!-- Welcome message -->
+      <div class="fc-chat-message-bot">
+        <div style="background:white;padding:12px 16px;border-radius:12px 12px 12px 4px;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
+          <div style="font-size:14px;line-height:1.5">
+            👋 Hi! I'm your Farm Credit AI Assistant. I can help you with:<br><br>
+            • <strong>Patronage</strong> - Check your dividend estimates<br>
+            • <strong>Loans</strong> - Application status & requirements<br>
+            • <strong>AgSunrise</strong> - Young farmer programs<br>
+            • <strong>Account</strong> - General questions<br><br>
+            What can I help you with today?
+          </div>
+        </div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:4px;padding-left:4px">Just now</div>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div style="padding:16px;background:white;border-top:1px solid #e5e7eb">
+      <div style="display:flex;gap:8px">
+        <input id="fc-chat-input" type="text" placeholder="Type your message..." aria-label="Chat message" style="flex:1;padding:12px 16px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;outline:none" />
+        <button id="fc-chat-send" aria-label="Send message" style="background:linear-gradient(135deg,#345220,#52812c);color:white;border:none;width:44px;height:44px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity 0.2s">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Quick Actions -->
+      <div id="fc-quick-actions" style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="fc-quick-btn" data-message="What is my patronage dividend?">💰 Patronage</button>
+        <button class="fc-quick-btn" data-message="Check my loan application status">📋 Loan Status</button>
+        <button class="fc-quick-btn" data-message="Tell me about AgSunrise">🌱 AgSunrise</button>
+        <button class="fc-quick-btn" data-message="I need help with my account">❓ Help</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Chat button hover */
+#fc-chat-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(82,129,44,0.5);
+}
+
+#fc-chat-button:active {
+  transform: scale(1.05);
+}
+
+#fc-chat-close:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Quick action buttons */
+.fc-quick-btn {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.fc-quick-btn:hover {
+  background: #e5e7eb;
+  border-color: #52812c;
+}
+
+/* Chat input focus */
+#fc-chat-input:focus {
+  border-color: #52812c;
+  box-shadow: 0 0 0 3px rgba(82,129,44,0.1);
+}
+
+/* Scrollbar */
+#fc-chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+#fc-chat-messages::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+#fc-chat-messages::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Message styles */
+.fc-chat-message-user {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.fc-chat-message-user > div:first-child {
+  background: linear-gradient(135deg,#345220,#52812c);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 12px 12px 4px 12px;
+  max-width: 80%;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.fc-chat-message-bot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  #fc-chat-button {
+    bottom: 16px;
+    right: 16px;
+    width: 56px;
+    height: 56px;
+  }
+  
+  #fc-chat-modal {
+    bottom: 88px;
+    right: 16px;
+    left: 16px;
+    width: auto;
+    max-width: none;
+  }
+}
+
+/* Typing indicator */
+.fc-typing {
+  display: flex;
+  gap: 4px;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 12px 12px 12px 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  width: fit-content;
+}
+
+.fc-typing span {
+  width: 8px;
+  height: 8px;
+  background: #9ca3af;
+  border-radius: 50%;
+  animation: fc-typing-animation 1.4s infinite;
+}
+
+.fc-typing span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.fc-typing span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes fc-typing-animation {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-8px);
+  }
+}
+</style>
+
+<script>
+(function() {
+  // Chat state
+  let chatOpen = false;
+  
+  // DOM elements
+  const chatButton = document.getElementById('fc-chat-button');
+  const chatModal = document.getElementById('fc-chat-modal');
+  const chatClose = document.getElementById('fc-chat-close');
+  const chatInput = document.getElementById('fc-chat-input');
+  const chatSend = document.getElementById('fc-chat-send');
+  const chatMessages = document.getElementById('fc-chat-messages');
+  const quickActions = document.querySelectorAll('.fc-quick-btn');
+  
+  // Demo responses
+  const responses = {
+    'patronage': 'Your estimated 2024 patronage dividend is <strong>$3,250</strong> based on your current loan balance. This is part of our record <strong>$9.1M distribution</strong>! 💰',
+    'loan': 'Your loan application <strong>#AG2024-0157</strong> is currently in <strong>Underwriting Review</strong>. Expected decision within 5-7 business days. You\'ll receive email/SMS updates. 📋',
+    'agsunrise': '<strong>AgSunrise</strong> is our young & beginning farmer program! It includes:<br>• Reduced interest rates<br>• Flexible terms<br>• Mentorship matching<br>• Free financial education<br><br>Apply at <a href="agsunrise/index.html" style="color:#52812c">farmcreditsemo.com/agsunrise</a> 🌱',
+    'help': 'I can help with:<br>• Account questions<br>• Payment schedules<br>• Document uploads<br>• Contact info updates<br><br>Or call us at <strong>(877) 730-7327</strong> for immediate assistance. ❓',
+    'default': 'Thanks for your question! For specific account details, please call us at <strong>(877) 730-7327</strong> or email <strong>support@farmcreditsemo.com</strong>. Our team is ready to help! 😊'
+  };
+  
+  // Toggle chat
+  function toggleChat() {
+    chatOpen = !chatOpen;
+    chatModal.style.display = chatOpen ? 'flex' : 'none';
+    if (chatOpen) {
+      chatInput.focus();
+      // Hide quick actions after first open (keep it clean)
+      setTimeout(() => {
+        const quickActionsContainer = document.getElementById('fc-quick-actions');
+        if (quickActionsContainer && chatMessages.children.length > 1) {
+          quickActionsContainer.style.display = 'none';
+        }
+      }, 100);
+    }
+  }
+  
+  // Add message
+  function addMessage(text, isUser = false) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = isUser ? 'fc-chat-message-user' : 'fc-chat-message-bot';
+    
+    const time = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    
+    if (isUser) {
+      msgDiv.innerHTML = `
+        <div>${text}</div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:4px;padding-right:4px">${time}</div>
+      `;
+    } else {
+      msgDiv.innerHTML = `
+        <div style="background:white;padding:12px 16px;border-radius:12px 12px 12px 4px;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
+          <div style="font-size:14px;line-height:1.5">${text}</div>
+        </div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:4px;padding-left:4px">${time}</div>
+      `;
+    }
+    
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+  
+  // Show typing indicator
+  function showTyping() {
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'fc-chat-message-bot';
+    typingDiv.id = 'fc-typing-indicator';
+    typingDiv.innerHTML = '<div class="fc-typing"><span></span><span></span><span></span></div>';
+    chatMessages.appendChild(typingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+  
+  // Remove typing indicator
+  function hideTyping() {
+    const typingIndicator = document.getElementById('fc-typing-indicator');
+    if (typingIndicator) typingIndicator.remove();
+  }
+  
+  // Get response
+  function getResponse(message) {
+    const msg = message.toLowerCase();
+    
+    if (msg.includes('patronage') || msg.includes('dividend') || msg.includes('refund')) {
+      return responses.patronage;
+    } else if (msg.includes('loan') || msg.includes('application') || msg.includes('status')) {
+      return responses.loan;
+    } else if (msg.includes('agsunrise') || msg.includes('young farmer') || msg.includes('beginning')) {
+      return responses.agsunrise;
+    } else if (msg.includes('help') || msg.includes('support') || msg.includes('account')) {
+      return responses.help;
+    } else {
+      return responses.default;
+    }
+  }
+  
+  // Send message
+  function sendMessage() {
+    const message = chatInput.value.trim();
+    if (!message) return;
+    
+    // Add user message
+    addMessage(message, true);
+    chatInput.value = '';
+    
+    // Show typing
+    showTyping();
+    
+    // Simulate AI response delay
+    setTimeout(() => {
+      hideTyping();
+      const response = getResponse(message);
+      addMessage(response);
+    }, 800 + Math.random() * 400); // 800-1200ms delay
+  }
+  
+  // Event listeners
+  chatButton.addEventListener('click', toggleChat);
+  chatClose.addEventListener('click', toggleChat);
+  chatSend.addEventListener('click', sendMessage);
+  
+  chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+  
+  quickActions.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const message = btn.getAttribute('data-message');
+      chatInput.value = message;
+      sendMessage();
+    });
+  });
+  
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && chatOpen) {
+      toggleChat();
+    }
+  });
+  
+  // Close modal when clicking outside
+  chatModal.addEventListener('click', (e) => {
+    if (e.target === chatModal) {
+      toggleChat();
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgSunrise Mentorship | Farm Credit SEMO</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #f4f7f0;
+      color: #1e3013;
+    }
+
+    header {
+      background: linear-gradient(135deg, #345220 0%, #52812c 60%, #426824 100%);
+      color: white;
+      padding: 40px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .header-content {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .tag {
+      background: rgba(139, 195, 74, 0.2);
+      border: 1px solid rgba(139, 195, 74, 0.6);
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #8bc34a;
+      margin-bottom: 16px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    header h1 {
+      font-size: 32px;
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    header p {
+      font-size: 16px;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .hero-card {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      margin: -60px auto 40px;
+      position: relative;
+      max-width: 700px;
+    }
+
+    .hero-card h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #345220;
+      margin-bottom: 12px;
+    }
+
+    .hero-card p {
+      color: #6b7280;
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      background: #52812c;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .cta-button:hover {
+      background: #426824;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(82, 129, 44, 0.3);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .section-header h2 {
+      font-size: 28px;
+      font-weight: 900;
+      color: #345220;
+      margin-bottom: 8px;
+    }
+
+    .section-header p {
+      color: #6b7280;
+      font-size: 15px;
+    }
+
+    .mentor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .mentor-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .mentor-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .mentor-header {
+      padding: 20px;
+      background: linear-gradient(135deg, #f2f7ed, #e5f0d8);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .mentor-avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #52812c, #426824);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 700;
+      flex-shrink: 0;
+      border: 3px solid white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .mentor-info h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e3013;
+      margin-bottom: 4px;
+    }
+
+    .mentor-location {
+      font-size: 13px;
+      color: #6b7280;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .mentor-body {
+      padding: 20px;
+    }
+
+    .mentor-crops {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .crop-tag {
+      padding: 4px 10px;
+      background: #f2f7ed;
+      border: 1px solid #c4dab8;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #52812c;
+    }
+
+    .mentor-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+      padding: 16px;
+      background: #f9fafb;
+      border-radius: 8px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: 800;
+      color: #52812c;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    .mentor-bio {
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .mentor-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid #f3f4f6;
+    }
+
+    .availability {
+      font-size: 12px;
+      color: #52812c;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .connect-button {
+      padding: 8px 16px;
+      background: #52812c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .connect-button:hover {
+      background: #426824;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+      margin: 40px 0;
+    }
+
+    .benefit-card {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .benefit-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f2f7ed, #e5f0d8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    .benefit-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #1e3013;
+      margin-bottom: 8px;
+    }
+
+    .benefit-card p {
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    .testimonial {
+      background: white;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+      margin-bottom: 24px;
+      border-left: 4px solid #52812c;
+    }
+
+    .testimonial-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .testimonial-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #52812c, #426824);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .testimonial-info h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1e3013;
+    }
+
+    .testimonial-info p {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .testimonial-quote {
+      font-size: 15px;
+      line-height: 1.7;
+      color: #4b5563;
+      font-style: italic;
+    }
+
+    @media (max-width: 768px) {
+      .mentor-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-card {
+        padding: 24px;
+        margin: -40px 16px 32px;
+      }
+
+      .benefits-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div class="tag">🌱 Connect & Grow</div>
+      <h1>AgSunrise Mentorship</h1>
+      <p>Get paired with an experienced Farm Credit SEMO member who's been where you are. Learn from someone who's succeeded in farming and wants to help the next generation.</p>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="hero-card">
+      <h2>Find Your Farming Mentor</h2>
+      <p>Our AI-powered matching system connects you with experienced farmers based on your crops, location, and goals. Get personalized guidance for 6 months — completely free.</p>
+      <button class="cta-button">
+        <span>🎯</span>
+        Find My Match
+      </button>
+    </div>
+
+    <div class="section-header">
+      <h2>Why Mentorship Matters</h2>
+      <p>Young farmers with mentors succeed at 3x the rate of those going it alone</p>
+    </div>
+
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">🎓</div>
+        <h3>Real-World Experience</h3>
+        <p>Learn from someone who's weathered droughts, floods, market crashes, and still succeeded.</p>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon">📊</div>
+        <h3>Business Guidance</h3>
+        <p>Get help with financial planning, cash flow management, and making tough decisions.</p>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon">🤝</div>
+        <h3>Network Access</h3>
+        <p>Connect to equipment dealers, seed suppliers, and other farmers your mentor trusts.</p>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon">💡</div>
+        <h3>Avoid Mistakes</h3>
+        <p>Learn from their failures so you don't repeat them. Save thousands in costly errors.</p>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <h2>Meet Our Mentors</h2>
+      <p>Experienced Farm Credit SEMO members ready to guide the next generation</p>
+    </div>
+
+    <div class="mentor-grid">
+      <div class="mentor-card">
+        <div class="mentor-header">
+          <div class="mentor-avatar">RH</div>
+          <div class="mentor-info">
+            <h3>Ray Henderson</h3>
+            <div class="mentor-location">📍 Jackson, MO (Cape Girardeau County)</div>
+          </div>
+        </div>
+        <div class="mentor-body">
+          <div class="mentor-crops">
+            <span class="crop-tag">🌽 Corn</span>
+            <span class="crop-tag">🌾 Soybeans</span>
+          </div>
+          <div class="mentor-stats">
+            <div class="stat">
+              <span class="stat-value">25+</span>
+              <span class="stat-label">Years</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">1,850</span>
+              <span class="stat-label">Acres</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">3</span>
+              <span class="stat-label">Mentees</span>
+            </div>
+          </div>
+          <div class="mentor-bio">
+            "Started with 200 acres in 1999. Grew to 1,850 through smart land purchases and cash flow management. Happy to help young farmers avoid the mistakes I made."
+          </div>
+          <div class="mentor-footer">
+            <div class="availability">
+              <span>🟢</span> Available
+            </div>
+            <button class="connect-button">Request Match</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mentor-card">
+        <div class="mentor-header">
+          <div class="mentor-avatar">DM</div>
+          <div class="mentor-info">
+            <h3>Donna Mabry</h3>
+            <div class="mentor-location">📍 Sikeston, MO (Scott County)</div>
+          </div>
+        </div>
+        <div class="mentor-body">
+          <div class="mentor-crops">
+            <span class="crop-tag">🌾 Cotton</span>
+            <span class="crop-tag">🌾 Soybeans</span>
+            <span class="crop-tag">🌽 Corn</span>
+          </div>
+          <div class="mentor-stats">
+            <div class="stat">
+              <span class="stat-value">18+</span>
+              <span class="stat-label">Years</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">3,200</span>
+              <span class="stat-label">Acres</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">2</span>
+              <span class="stat-label">Mentees</span>
+            </div>
+          </div>
+          <div class="mentor-bio">
+            "Family farm for three generations. Specialized in cotton production. I mentor women in agriculture and anyone serious about building a sustainable operation."
+          </div>
+          <div class="mentor-footer">
+            <div class="availability">
+              <span>🟢</span> Available
+            </div>
+            <button class="connect-button">Request Match</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mentor-card">
+        <div class="mentor-header">
+          <div class="mentor-avatar">JB</div>
+          <div class="mentor-info">
+            <h3>James Bowen</h3>
+            <div class="mentor-location">📍 Charleston, MO (Mississippi County)</div>
+          </div>
+        </div>
+        <div class="mentor-body">
+          <div class="mentor-crops">
+            <span class="crop-tag">🌾 Rice</span>
+            <span class="crop-tag">🌾 Soybeans</span>
+          </div>
+          <div class="mentor-stats">
+            <div class="stat">
+              <span class="stat-value">30+</span>
+              <span class="stat-label">Years</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">2,100</span>
+              <span class="stat-label">Acres</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value">4</span>
+              <span class="stat-label">Mentees</span>
+            </div>
+          </div>
+          <div class="mentor-bio">
+            "Specialize in rice farming in the Mississippi Delta. Transitioned from row crops to rice in 2005. Love teaching the business side of farming."
+          </div>
+          <div class="mentor-footer">
+            <div class="availability">
+              <span>🟡</span> 1 spot left
+            </div>
+            <button class="connect-button">Request Match</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <h2>Success Stories</h2>
+      <p>Hear from farmers who found their mentor through AgSunrise</p>
+    </div>
+
+    <div class="testimonial">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar">TM</div>
+        <div class="testimonial-info">
+          <h4>Tyler Martinez</h4>
+          <p>Young Farmer • Matched with Ray Henderson • 2024</p>
+        </div>
+      </div>
+      <div class="testimonial-quote">
+        "Ray taught me more in 6 months than I learned in 4 years of ag school. He helped me write a business plan that actually got approved, introduced me to his equipment dealer who gave me a great deal, and answers my texts at 10 PM when I'm panicking about commodity prices. Best part of the AgSunrise program."
+      </div>
+    </div>
+
+    <div class="testimonial">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar">SK</div>
+        <div class="testimonial-info">
+          <h4>Sarah Kim</h4>
+          <p>Beginning Farmer • Matched with Donna Mabry • 2025</p>
+        </div>
+      </div>
+      <div class="testimonial-quote">
+        "As a first-generation farmer, I had nobody to ask questions. Donna changed that. She walks me through every decision — from crop insurance to when to sell. Her experience saved me from planting the wrong variety last spring. She's like having a farming mom who actually wants you to succeed."
+      </div>
+    </div>
+
+    <div class="hero-card" style="margin-top: 48px;">
+      <h2>Ready to Get Matched?</h2>
+      <p>Our AI matching algorithm considers your crops, location, experience level, and goals. We'll pair you with a mentor who's been in your shoes and succeeded. Fill out a 5-minute profile and get matched this week.</p>
+      <button class="cta-button">
+        <span>🚀</span>
+        Start My Mentorship Journey
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Connect button clicks
+    document.querySelectorAll('.connect-button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const mentorName = btn.closest('.mentor-card').querySelector('.mentor-info h3').textContent;
+        alert(`Request sent to ${mentorName}!\n\nIn the full platform:\n• Your profile would be sent to the mentor\n• They'd review and accept/suggest someone else\n• You'd get matched within 48 hours\n• A 6-month mentorship would begin`);
+      });
+    });
+
+    // CTA button clicks
+    document.querySelectorAll('.cta-button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        alert('Mentorship matching form would open here.\n\nYou\'d answer:\n• Your farming goals\n• Crops you grow/want to grow\n• Your location\n• Experience level\n• Time commitment\n\nThen our AI would suggest 3 best matches!');
+      });
+    });
+
+    // Mentor card clicks
+    document.querySelectorAll('.mentor-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (e.target.classList.contains('connect-button')) return;
+        const mentorName = card.querySelector('.mentor-info h3').textContent;
+        alert(`Full mentor profile for ${mentorName} would open here.\n\nYou'd see:\n• Complete bio & farming history\n• Video introduction\n• Previous mentee reviews\n• Availability calendar\n• Areas of expertise\n• Contact preferences`);
+      });
+    });
+  </script>
+
+  <!-- Include AgBot -->
+  <script src="../chatbot/agbot.js"></script>
+<footer>
+<div style="margin-top:32px;padding-top:24px;border-top:1px solid #e5e7eb;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap">
+  <div style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:linear-gradient(135deg,#d1fae5,#ecfdf5);border:2px solid #10b981;border-radius:8px;font-size:13px;font-weight:600;color:#065f46">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span>WCAG 2.1 AA</span>
+  </div>
+  
+  <div style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:linear-gradient(135deg,#dbeafe,#eff6ff);border:2px solid #3b82f6;border-radius:8px;font-size:13px;font-weight:600;color:#1e40af">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+    </svg>
+    <span>Keyboard Accessible</span>
+  </div>
+  
+  <div style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:linear-gradient(135deg,#fef3c7,#fffbeb);border:2px solid #f59e0b;border-radius:8px;font-size:13px;font-weight:600;color:#92400e">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+      <circle cx="12" cy="12" r="3"></circle>
+    </svg>
+    <span>Screen Reader Friendly</span>
+  </div>
+</div>
+
+<p style="text-align:center;margin-top:16px;font-size:11px;color:#9ca3af">
+  Built with accessibility in mind · Tested with NVDA, VoiceOver, and Lighthouse
+</p>
+
+</footer>
+<!-- Farm Credit AI Assistant Widget - Add before </body> -->
+<div id="fc-chatbot-widget">
+  <!-- Chat Button -->
+  <button id="fc-chat-button" aria-label="Open Farm Credit AI Assistant" style="position:fixed;bottom:24px;right:24px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#345220,#52812c);border:none;box-shadow:0 4px 16px rgba(82,129,44,0.4);cursor:pointer;z-index:9999;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+  </button>
+
+  <!-- Chat Modal -->
+  <div id="fc-chat-modal" role="dialog" aria-labelledby="fc-chat-title" aria-modal="true" style="position:fixed;bottom:100px;right:24px;width:380px;max-width:calc(100vw - 48px);height:550px;max-height:calc(100vh - 150px);background:white;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2);z-index:10000;display:none;flex-direction:column;overflow:hidden">
+    
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#345220,#52812c);color:white;padding:16px 20px;display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px">🤖</div>
+        <div>
+          <div id="fc-chat-title" style="font-weight:700;font-size:16px">Farm Credit AI Assistant</div>
+          <div style="font-size:12px;opacity:0.9">Online · Ready to help</div>
+        </div>
+      </div>
+      <button id="fc-chat-close" aria-label="Close chat" style="background:none;border:none;color:white;font-size:24px;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:4px;transition:background 0.2s">×</button>
+    </div>
+
+    <!-- Messages -->
+    <div id="fc-chat-messages" style="flex:1;overflow-y:auto;padding:20px;background:#f9fafb;display:flex;flex-direction:column;gap:12px">
+      <!-- Welcome message -->
+      <div class="fc-chat-message-bot">
+        <div style="background:white;padding:12px 16px;border-radius:12px 12px 12px 4px;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
+          <div style="font-size:14px;line-height:1.5">
+            👋 Hi! I'm your Farm Credit AI Assistant. I can help you with:<br><br>
+            • <strong>Patronage</strong> - Check your dividend estimates<br>
+            • <strong>Loans</strong> - Application status & requirements<br>
+            • <strong>AgSunrise</strong> - Young farmer programs<br>
+            • <strong>Account</strong> - General questions<br><br>
+            What can I help you with today?
+          </div>
+        </div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:4px;padding-left:4px">Just now</div>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div style="padding:16px;background:white;border-top:1px solid #e5e7eb">
+      <div style="display:flex;gap:8px">
+        <input id="fc-chat-input" type="text" placeholder="Type your message..." aria-label="Chat message" style="flex:1;padding:12px 16px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;outline:none" />
+        <button id="fc-chat-send" aria-label="Send message" style="background:linear-gradient(135deg,#345220,#52812c);color:white;border:none;width:44px;height:44px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity 0.2s">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Quick Actions -->
+      <div id="fc-quick-actions" style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="fc-quick-btn" data-message="What is my patronage dividend?">💰 Patronage</button>
+        <button class="fc-quick-btn" data-message="Check my loan application status">📋 Loan Status</button>
+        <button class="fc-quick-btn" data-message="Tell me about AgSunrise">🌱 AgSunrise</button>
+        <button class="fc-quick-btn" data-message="I need help with my account">❓ Help</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Chat button hover */
+#fc-chat-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(82,129,44,0.5);
+}
+
+#fc-chat-button:active {
+  transform: scale(1.05);
+}
+
+#fc-chat-close:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Quick action buttons */
+.fc-quick-btn {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.fc-quick-btn:hover {
+  background: #e5e7eb;
+  border-color: #52812c;
+}
+
+/* Chat input focus */
+#fc-chat-input:focus {
+  border-color: #52812c;
+  box-shadow: 0 0 0 3px rgba(82,129,44,0.1);
+}
+
+/* Scrollbar */
+#fc-chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+#fc-chat-messages::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+#fc-chat-messages::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Message styles */
+.fc-chat-message-user {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.fc-chat-message-user > div:first-child {
+  background: linear-gradient(135deg,#345220,#52812c);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 12px 12px 4px 12px;
+  max-width: 80%;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.fc-chat-message-bot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  #fc-chat-button {
+    bottom: 16px;
+    right: 16px;
+    width: 56px;
+    height: 56px;
+  }
+  
+  #fc-chat-modal {
+    bottom: 88px;
+    right: 16px;
+    left: 16px;
+    width: auto;
+    max-width: none;
+  }
+}
+
+/* Typing indicator */
+.fc-typing {
+  display: flex;
+  gap: 4px;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 12px 12px 12px 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  width: fit-content;
+}
+
+.fc-typing span {
+  width: 8px;
+  height: 8px;
+  background: #9ca3af;
+  border-radius: 50%;
+  animation: fc-typing-animation 1.4s infinite;
+}
+
+.fc-typing span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.fc-typing span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes fc-typing-animation {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-8px);
+  }
+}
+</style>
+
+<script>
+(function() {
+  // Chat state
+  let chatOpen = false;
+  
+  // DOM elements
+  const chatButton = document.getElementById('fc-chat-button');
+  const chatModal = document.getElementById('fc-chat-modal');
+  const chatClose = document.getElementById('fc-chat-close');
+  const chatInput = document.getElementById('fc-chat-input');
+  const chatSend = document.getElementById('fc-chat-send');
+  const chatMessages = document.getElementById('fc-chat-messages');
+  const quickActions = document.querySelectorAll('.fc-quick-btn');
+  
+  // Demo responses
+  const responses = {
+    'patronage': 'Your estimated 2024 patronage dividend is <strong>$3,250</strong> based on your current loan balance. This is part of our record <strong>$9.1M distribution</strong>! 💰',
+    'loan': 'Your loan application <strong>#AG2024-0157</strong> is currently in <strong>Underwriting Review</strong>. Expected decision within 5-7 business days. You\'ll receive email/SMS updates. 📋',
+    'agsunrise': '<strong>AgSunrise</strong> is our young & beginning farmer program! It includes:<br>• Reduced interest rates<br>• Flexible terms<br>• Mentorship matching<br>• Free financial education<br><br>Apply at <a href="agsunrise/index.html" style="color:#52812c">farmcreditsemo.com/agsunrise</a> 🌱',
+    'help': 'I can help with:<br>• Account questions<br>• Payment schedules<br>• Document uploads<br>• Contact info updates<br><br>Or call us at <strong>(877) 730-7327</strong> for immediate assistance. ❓',
+    'default': 'Thanks for your question! For specific account details, please call us at <strong>(877) 730-7327</strong> or email <strong>support@farmcreditsemo.com</strong>. Our team is ready to help! 😊'
+  };
+  
+  // Toggle chat
+  function toggleChat() {
+    chatOpen = !chatOpen;
+    chatModal.style.display = chatOpen ? 'flex' : 'none';
+    if (chatOpen) {
+      chatInput.focus();
+      // Hide quick actions after first open (keep it clean)
+      setTimeout(() => {
+        const quickActionsContainer = document.getElementById('fc-quick-actions');
+        if (quickActionsContainer && chatMessages.children.length > 1) {
+          quickActionsContainer.style.display = 'none';
+        }
+      }, 100);
+    }
+  }
+  
+  // Add message
+  function addMessage(text, isUser = false) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = isUser ? 'fc-chat-message-user' : 'fc-chat-message-bot';
+    
+    const time = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    
+    if (isUser) {
+      msgDiv.innerHTML = `
+        <div>${text}</div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:4px;padding-right:4px">${time}</div>
+      `;
+    } else {
+      msgDiv.innerHTML = `
+        <div style="background:white;padding:12px 16px;border-radius:12px 12px 12px 4px;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
+          <div style="font-size:14px;line-height:1.5">${text}</div>
+        </div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:4px;padding-left:4px">${time}</div>
+      `;
+    }
+    
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+  
+  // Show typing indicator
+  function showTyping() {
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'fc-chat-message-bot';
+    typingDiv.id = 'fc-typing-indicator';
+    typingDiv.innerHTML = '<div class="fc-typing"><span></span><span></span><span></span></div>';
+    chatMessages.appendChild(typingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+  
+  // Remove typing indicator
+  function hideTyping() {
+    const typingIndicator = document.getElementById('fc-typing-indicator');
+    if (typingIndicator) typingIndicator.remove();
+  }
+  
+  // Get response
+  function getResponse(message) {
+    const msg = message.toLowerCase();
+    
+    if (msg.includes('patronage') || msg.includes('dividend') || msg.includes('refund')) {
+      return responses.patronage;
+    } else if (msg.includes('loan') || msg.includes('application') || msg.includes('status')) {
+      return responses.loan;
+    } else if (msg.includes('agsunrise') || msg.includes('young farmer') || msg.includes('beginning')) {
+      return responses.agsunrise;
+    } else if (msg.includes('help') || msg.includes('support') || msg.includes('account')) {
+      return responses.help;
+    } else {
+      return responses.default;
+    }
+  }
+  
+  // Send message
+  function sendMessage() {
+    const message = chatInput.value.trim();
+    if (!message) return;
+    
+    // Add user message
+    addMessage(message, true);
+    chatInput.value = '';
+    
+    // Show typing
+    showTyping();
+    
+    // Simulate AI response delay
+    setTimeout(() => {
+      hideTyping();
+      const response = getResponse(message);
+      addMessage(response);
+    }, 800 + Math.random() * 400); // 800-1200ms delay
+  }
+  
+  // Event listeners
+  chatButton.addEventListener('click', toggleChat);
+  chatClose.addEventListener('click', toggleChat);
+  chatSend.addEventListener('click', sendMessage);
+  
+  chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+  
+  quickActions.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const message = btn.getAttribute('data-message');
+      chatInput.value = message;
+      sendMessage();
+    });
+  });
+  
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && chatOpen) {
+      toggleChat();
+    }
+  });
+  
+  // Close modal when clicking outside
+  chatModal.addEventListener('click', (e) => {
+    if (e.target === chatModal) {
+      toggleChat();
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

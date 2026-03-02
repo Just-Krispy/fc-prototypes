@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgSunrise Program — Farm Credit SEMO</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',system-ui,sans-serif;background:#f4f7f0;color:#1e3013}
+    header{background:#52812c;color:white;padding:16px 24px}
+    header .logo{font-size:20px;font-weight:700}header .logo span{color:#8bc34a}
+    header small{font-size:13px;opacity:.75}
+    .hero{background:linear-gradient(135deg,#52812c,#426824);color:white;padding:40px 24px;text-align:center}
+    .hero .tag{background:rgba(139,195,74,.25);border:1px solid #8bc34a;display:inline-block;padding:4px 14px;border-radius:20px;font-size:13px;font-weight:600;margin-bottom:12px;color:#8bc34a}
+    .hero h1{font-size:26px;font-weight:800;margin-bottom:8px}
+    .hero p{font-size:15px;opacity:.85;max-width:440px;margin:0 auto}
+    .main{max-width:700px;margin:-24px auto 40px;padding:0 16px}
+    .progress-wrap{background:white;border-radius:12px 12px 0 0;padding:20px 24px 0;box-shadow:0 4px 24px rgba(0,0,0,.1)}
+    .steps{display:flex}
+    .step{flex:1;text-align:center;padding:8px 4px;position:relative}
+    .step::after{content:'';position:absolute;top:17px;left:58%;width:84%;height:2px;background:#e0e0e0}
+    .step:last-child::after{display:none}
+    .step.done::after{background:#8bc34a}
+    .dot{width:28px;height:28px;border-radius:50%;background:#e0e0e0;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#999;position:relative;z-index:1;transition:all .3s}
+    .step.active .dot{background:#52812c;color:white}
+    .step.done .dot{background:#8bc34a;color:white}
+    .step-lbl{font-size:11px;color:#aaa;margin-top:4px}
+    .step.active .step-lbl{color:#52812c;font-weight:600}
+    .form-card{background:white;border-radius:0 0 16px 16px;box-shadow:0 4px 24px rgba(0,0,0,.1);padding:28px 24px 32px}
+    .sec{display:none}.sec.active{display:block}
+    .sec h3{font-size:18px;font-weight:700;color:#52812c;margin-bottom:6px}
+    .sec .desc{font-size:14px;color:#666;margin-bottom:20px}
+    .field{margin-bottom:12px}
+    .field label{display:block;font-size:13px;font-weight:500;color:#555;margin-bottom:5px}
+    .req{color:#ef4444}
+    input[type=text],input[type=email],input[type=tel],input[type=number],input[type=date],select,textarea{width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;outline:none;font-family:inherit;transition:border-color .2s}
+    input:focus,select:focus,textarea:focus{border-color:#52812c}
+    textarea{min-height:100px;resize:vertical}
+    .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .g3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
+    .nav{display:flex;gap:12px;margin-top:24px}
+    .btn{flex:1;padding:12px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;border:none;transition:all .2s}
+    .btn-p{background:#52812c;color:white}.btn-p:hover{background:#426824}
+    .btn-s{background:#f2f7ed;color:#52812c;border:1.5px solid #c4dab8}.btn-s:hover{background:#e0f0d0}
+    .success{display:none;background:white;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.1);padding:48px 32px;text-align:center}
+    .success .icon{font-size:64px;margin-bottom:16px}
+    .success h2{font-size:24px;font-weight:800;color:#52812c;margin-bottom:8px}
+    .success p{color:#666;font-size:15px;margin-bottom:8px}
+    .ref{background:#f2f7ed;border:2px solid #8bc34a;border-radius:10px;padding:12px 24px;display:inline-block;margin:16px 0;font-size:22px;font-weight:800;color:#52812c;letter-spacing:1px}
+    .success-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+    .success-btns a{padding:10px 20px;border-radius:8px;font-weight:600;font-size:14px;text-decoration:none}
+    .upload-zone{border:2px dashed #c4dab8;border-radius:10px;padding:24px;text-align:center;cursor:pointer;background:#f9fdf5;margin-top:8px;transition:all .2s}
+    .upload-zone:hover{border-color:#52812c;background:#f2f7ed}
+    .upload-zone p{color:#888;font-size:14px}
+    .file-list{margin-top:10px}
+    .file-item{display:flex;align-items:center;gap:8px;padding:6px 10px;background:#f2f7ed;border-radius:6px;margin-bottom:6px;font-size:13px}
+    .review-box{background:#f4f7f0;border-radius:10px;padding:16px;font-size:14px;line-height:2;margin-bottom:20px}
+    .demo-note{background:#fff8e1;border:1px solid #ffc107;border-radius:8px;padding:10px 14px;font-size:12px;color:#856404;margin-bottom:16px}
+    @media(max-width:520px){.g2,.g3{grid-template-columns:1fr}.step-lbl{display:none}}
+  </style>
+</head>
+<body>
+<header><div class="logo">Farm Credit <span>SEMO</span></div><small>AgSunrise Young Farmer Program</small></header>
+<div class="hero">
+  <div class="tag">🌱 Next Generation Agriculture</div>
+  <h1>AgSunrise Application</h1>
+  <p>Financing built for young farmers. Apply in minutes from your phone — no printing, no faxing.</p>
+</div>
+
+<div class="main">
+  <div class="progress-wrap">
+    <div class="steps">
+      <div class="step active" id="s1"><div class="dot">1</div><div class="step-lbl">Personal</div></div>
+      <div class="step" id="s2"><div class="dot">2</div><div class="step-lbl">Farm</div></div>
+      <div class="step" id="s3"><div class="dot">3</div><div class="step-lbl">Loan</div></div>
+      <div class="step" id="s4"><div class="dot">4</div><div class="step-lbl">Docs</div></div>
+      <div class="step" id="s5"><div class="dot">5</div><div class="step-lbl">Review</div></div>
+    </div>
+  </div>
+
+  <div class="form-card" id="formCard">
+    <!-- Step 1 -->
+    <div class="sec active" id="step1">
+      <h3>Personal Information</h3><div class="desc">Fields marked <span class="req">*</span> are required.</div>
+      <div class="g2">
+        <div class="field"><label>First Name <span class="req">*</span></label><input type="text" id="f_first" placeholder="John"/></div>
+        <div class="field"><label>Last Name <span class="req">*</span></label><input type="text" id="f_last" placeholder="Farmer"/></div>
+      </div>
+      <div class="g2">
+        <div class="field"><label>Email <span class="req">*</span></label><input type="email" id="f_email" placeholder="you@example.com"/></div>
+        <div class="field"><label>Phone <span class="req">*</span></label><input type="tel" id="f_phone" placeholder="(573) 555-0000"/></div>
+      </div>
+      <div class="field"><label>Date of Birth <span class="req">*</span></label><input type="date" id="f_dob"/></div>
+      <div class="field"><label>Street Address <span class="req">*</span></label><input type="text" id="f_addr" placeholder="123 Farm Road"/></div>
+      <div class="g3">
+        <div class="field"><label>City <span class="req">*</span></label><input type="text" id="f_city" placeholder="Sikeston"/></div>
+        <div class="field"><label>State</label><input type="text" id="f_state" value="MO"/></div>
+        <div class="field"><label>ZIP <span class="req">*</span></label><input type="text" id="f_zip" placeholder="63801"/></div>
+      </div>
+      <div class="nav"><button class="btn btn-p" onclick="go(2)">Next: Farm Info →</button></div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="sec" id="step2">
+      <h3>About Your Farm</h3><div class="desc">Help us understand your operation.</div>
+      <div class="field"><label>Farm / Operation Name <span class="req">*</span></label><input type="text" id="f_farm" placeholder="Cunningham Family Farm"/></div>
+      <div class="g2">
+        <div class="field"><label>Primary Farm Type <span class="req">*</span></label>
+          <select id="f_type"><option value="">Select type...</option><option>Row Crops (corn, soybeans)</option><option>Cotton</option><option>Rice</option><option>Livestock / Cattle</option><option>Hogs / Swine</option><option>Poultry</option><option>Specialty Crops</option><option>Mixed / Diversified</option><option>Beginning / Starting Out</option></select>
+        </div>
+        <div class="field"><label>Total Acres <span class="req">*</span></label><input type="number" id="f_acres" placeholder="250"/></div>
+      </div>
+      <div class="g2">
+        <div class="field"><label>Years Farming <span class="req">*</span></label><input type="number" id="f_years" placeholder="3" min="0" max="10"/><small style="color:#aaa;font-size:11px">AgSunrise is for farmers with 10 or fewer years experience</small></div>
+        <div class="field"><label>Est. Annual Farm Income ($)</label><input type="number" id="f_income" placeholder="85000"/></div>
+      </div>
+      <div class="nav"><button class="btn btn-s" onclick="go(1)">← Back</button><button class="btn btn-p" onclick="go(3)">Next: Loan Details →</button></div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="sec" id="step3">
+      <h3>Loan Information</h3><div class="desc">What do you need financing for?</div>
+      <div class="g2">
+        <div class="field"><label>Loan Purpose <span class="req">*</span></label>
+          <select id="f_purpose"><option value="">Select purpose...</option><option>Farm Real Estate Purchase</option><option>Land Purchase</option><option>Equipment Purchase</option><option>Operating / Input Costs</option><option>Livestock Purchase</option><option>Farm Improvements</option><option>Refinance Existing Debt</option><option>Starting My Farm</option><option>Other</option></select>
+        </div>
+        <div class="field"><label>Requested Amount ($) <span class="req">*</span></label><input type="number" id="f_amount" placeholder="150000"/></div>
+      </div>
+      <div class="field"><label>Tell us your story <span class="req">*</span></label>
+        <textarea id="f_essay" placeholder="Share your farming story, your goals, and how this loan would help your operation grow. Why farming? What does the future look like? (200–500 words recommended)"></textarea>
+      </div>
+      <div class="nav"><button class="btn btn-s" onclick="go(2)">← Back</button><button class="btn btn-p" onclick="go(4)">Next: Documents →</button></div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="sec" id="step4">
+      <h3>Document Upload</h3><div class="desc">Optional — you can bring documents to your branch instead.</div>
+      <p style="font-size:13px;color:#666;margin-bottom:14px"><strong>Helpful documents:</strong> Government-issued ID · Last 2 years of tax returns · Farm income/expense records · Equipment list</p>
+      <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+        <p>📎 Tap to upload documents<br/><span style="font-size:12px">PDF, JPG, PNG — up to 10MB each</span></p>
+      </div>
+      <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="addFiles(this.files)"/>
+      <div class="file-list" id="fileList"></div>
+      <div class="nav"><button class="btn btn-s" onclick="go(3)">← Back</button><button class="btn btn-p" onclick="go(5)">Next: Review →</button></div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="sec" id="step5">
+      <h3>Review & Submit</h3><div class="desc">Take a moment to review before submitting.</div>
+      <div class="review-box" id="reviewBox"></div>
+      <div class="field">
+        <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:14px;font-weight:normal">
+          <input type="checkbox" id="agree" style="width:auto;margin-top:3px"/>
+          <span>I certify all information is accurate. I understand this is an application, not a commitment. I consent to Farm Credit SEMO contacting me about my application.</span>
+        </label>
+      </div>
+      <div class="nav"><button class="btn btn-s" onclick="go(4)">← Back</button><button class="btn btn-p" id="submitBtn" onclick="submitApp()">🌱 Submit Application</button></div>
+    </div>
+  </div>
+
+  <!-- Success -->
+  <div class="success" id="successCard">
+    <div class="icon">🌱</div>
+    <h2>Application Submitted!</h2>
+    <p>Welcome to the AgSunrise Program. Your application is in good hands.</p>
+    <div class="ref" id="refNum">AS-2025-0000</div>
+    <p>Save this reference number to check your status.</p>
+    <p style="font-size:13px;color:#aaa;margin-top:10px">A confirmation email has been sent. Your <span id="branchName">local</span> branch will be in touch within 5 business days.</p>
+    <div class="success-btns">
+      <a id="statusLink" href="status.html" style="background:#52812c;color:white;">Track My Application →</a>
+      <a href="https://farmcreditsemo.com" style="background:#f2f7ed;color:#52812c;border:1.5px solid #c4dab8;">farmcreditsemo.com</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  let cur=1; const files=[];
+  function v(id){return document.getElementById(id)?.value||'';}
+  function branch(zip){const z=parseInt(zip);if(z>=63730&&z<=63740)return'Dexter';if(z>=63755&&z<=63760)return'Jackson';if(z>=63857&&z<=63860)return'Kennett';return'Sikeston';}
+  function ref(){return'AS-'+new Date().getFullYear()+'-'+Math.floor(1000+Math.random()*9000);}
+
+  function go(n){
+    if(n>cur&&!validate(cur))return;
+    document.getElementById('step'+cur).classList.remove('active');
+    document.getElementById('s'+cur).classList.remove('active');
+    document.getElementById('s'+cur).classList.add('done');
+    cur=n;
+    document.getElementById('step'+cur).classList.add('active');
+    document.getElementById('s'+cur).classList.add('active');
+    if(n===5)buildReview();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function validate(n){
+    const reqs={1:['f_first','f_last','f_email','f_phone','f_dob','f_addr','f_city','f_zip'],2:['f_farm','f_type','f_acres','f_years'],3:['f_purpose','f_amount','f_essay']};
+    if(!reqs[n])return true;
+    for(const id of reqs[n]){const el=document.getElementById(id);if(!el?.value?.trim()){el?.focus();alert('Please fill in all required fields.');return false;}}
+    return true;
+  }
+
+  function addFiles(fl){
+    for(const f of fl)files.push(f);
+    document.getElementById('fileList').innerHTML=files.map(f=>`<div class="file-item">📄 ${f.name} <span style="color:#aaa;margin-left:auto">${(f.size/1024).toFixed(0)}KB</span></div>`).join('');
+  }
+
+  function buildReview(){
+    document.getElementById('reviewBox').innerHTML=`
+      <strong>👤 Personal</strong><br/>${v('f_first')} ${v('f_last')} · ${v('f_email')} · ${v('f_phone')}<br/>${v('f_addr')}, ${v('f_city')}, ${v('f_state')} ${v('f_zip')}<br/><br/>
+      <strong>🚜 Farm</strong><br/>${v('f_farm')} · ${v('f_type')}<br/>${v('f_acres')} acres · ${v('f_years')} years farming<br/><br/>
+      <strong>💰 Loan</strong><br/>${v('f_purpose')} · $${parseFloat(v('f_amount')||0).toLocaleString()}<br/><br/>
+      <strong>📎 Documents</strong><br/>${files.length} file(s) attached`;
+  }
+
+  function submitApp(){
+    if(!document.getElementById('agree').checked){alert('Please check the agreement box.');return;}
+    const r=ref(); const br=branch(v('f_zip'));
+    // Save to localStorage for status/admin pages
+    const apps=JSON.parse(localStorage.getItem('fc_apps')||'[]');
+    apps.push({ref_number:r,status:'submitted',first_name:v('f_first'),last_name:v('f_last'),email:v('f_email'),phone:v('f_phone'),farm_name:v('f_farm'),farm_type:v('f_type'),farm_acres:v('f_acres'),loan_purpose:v('f_purpose'),loan_amount:v('f_amount'),branch:br,submitted_at:new Date().toISOString(),essay:v('f_essay'),admin_notes:''});
+    localStorage.setItem('fc_apps',JSON.stringify(apps));
+    document.getElementById('formCard').style.display='none';
+    document.querySelector('.progress-wrap').style.display='none';
+    document.getElementById('successCard').style.display='block';
+    document.getElementById('refNum').textContent=r;
+    document.getElementById('branchName').textContent=br;
+    document.getElementById('statusLink').href='status.html?ref='+r;
+  }
+</script>
+<footer>
+<div style="margin-top:32px;padding-top:24px;border-top:1px solid #e5e7eb;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap">
+  <div style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:linear-gradient(135deg,#d1fae5,#ecfdf5);border:2px solid #10b981;border-radius:8px;font-size:13px;font-weight:600;color:#065f46">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span>WCAG 2.1 AA</span>
+  </div>
+  
+  <div style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:linear-gradient(135deg,#dbeafe,#eff6ff);border:2px solid #3b82f6;border-radius:8px;font-size:13px;font-weight:600;color:#1e40af">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+    </svg>
+    <span>Keyboard Accessible</span>
+  </div>
+  
+  <div style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:linear-gradient(135deg,#fef3c7,#fffbeb);border:2px solid #f59e0b;border-radius:8px;font-size:13px;font-weight:600;color:#92400e">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+      <circle cx="12" cy="12" r="3"></circle>
+    </svg>
+    <span>Screen Reader Friendly</span>
+  </div>
+</div>
+
+<p style="text-align:center;margin-top:16px;font-size:11px;color:#9ca3af">
+  Built with accessibility in mind · Tested with NVDA, VoiceOver, and Lighthouse
+</p>
+
+</footer>
+<!-- Farm Credit AI Assistant Widget - Add before </body> -->
+<div id="fc-chatbot-widget">
+  <!-- Chat Button -->
+  <button id="fc-chat-button" aria-label="Open Farm Credit AI Assistant" style="position:fixed;bottom:24px;right:24px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#345220,#52812c);border:none;box-shadow:0 4px 16px rgba(82,129,44,0.4);cursor:pointer;z-index:9999;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+  </button>
+
+  <!-- Chat Modal -->
+  <div id="fc-chat-modal" role="dialog" aria-labelledby="fc-chat-title" aria-modal="true" style="position:fixed;bottom:100px;right:24px;width:380px;max-width:calc(100vw - 48px);height:550px;max-height:calc(100vh - 150px);background:white;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2);z-index:10000;display:none;flex-direction:column;overflow:hidden">
+    
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#345220,#52812c);color:white;padding:16px 20px;display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px">🤖</div>
+        <div>
+          <div id="fc-chat-title" style="font-weight:700;font-size:16px">Farm Credit AI Assistant</div>
+          <div style="font-size:12px;opacity:0.9">Online · Ready to help</div>
+        </div>
+      </div>
+      <button id="fc-chat-close" aria-label="Close chat" style="background:none;border:none;color:white;font-size:24px;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:4px;transition:background 0.2s">×</button>
+    </div>
+
+    <!-- Messages -->
+    <div id="fc-chat-messages" style="flex:1;overflow-y:auto;padding:20px;background:#f9fafb;display:flex;flex-direction:column;gap:12px">
+      <!-- Welcome message -->
+      <div class="fc-chat-message-bot">
+        <div style="background:white;padding:12px 16px;border-radius:12px 12px 12px 4px;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
+          <div style="font-size:14px;line-height:1.5">
+            👋 Hi! I'm your Farm Credit AI Assistant. I can help you with:<br><br>
+            • <strong>Patronage</strong> - Check your dividend estimates<br>
+            • <strong>Loans</strong> - Application status & requirements<br>
+            • <strong>AgSunrise</strong> - Young farmer programs<br>
+            • <strong>Account</strong> - General questions<br><br>
+            What can I help you with today?
+          </div>
+        </div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:4px;padding-left:4px">Just now</div>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div style="padding:16px;background:white;border-top:1px solid #e5e7eb">
+      <div style="display:flex;gap:8px">
+        <input id="fc-chat-input" type="text" placeholder="Type your message..." aria-label="Chat message" style="flex:1;padding:12px 16px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;outline:none" />
+        <button id="fc-chat-send" aria-label="Send message" style="background:linear-gradient(135deg,#345220,#52812c);color:white;border:none;width:44px;height:44px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity 0.2s">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Quick Actions -->
+      <div id="fc-quick-actions" style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="fc-quick-btn" data-message="What is my patronage dividend?">💰 Patronage</button>
+        <button class="fc-quick-btn" data-message="Check my loan application status">📋 Loan Status</button>
+        <button class="fc-quick-btn" data-message="Tell me about AgSunrise">🌱 AgSunrise</button>
+        <button class="fc-quick-btn" data-message="I need help with my account">❓ Help</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Chat button hover */
+#fc-chat-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(82,129,44,0.5);
+}
+
+#fc-chat-button:active {
+  transform: scale(1.05);
+}
+
+#fc-chat-close:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Quick action buttons */
+.fc-quick-btn {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.fc-quick-btn:hover {
+  background: #e5e7eb;
+  border-color: #52812c;
+}
+
+/* Chat input focus */
+#fc-chat-input:focus {
+  border-color: #52812c;
+  box-shadow: 0 0 0 3px rgba(82,129,44,0.1);
+}
+
+/* Scrollbar */
+#fc-chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+#fc-chat-messages::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+#fc-chat-messages::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Message styles */
+.fc-chat-message-user {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.fc-chat-message-user > div:first-child {
+  background: linear-gradient(135deg,#345220,#52812c);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 12px 12px 4px 12px;
+  max-width: 80%;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.fc-chat-message-bot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  #fc-chat-button {
+    bottom: 16px;
+    right: 16px;
+    width: 56px;
+    height: 56px;
+  }
+  
+  #fc-chat-modal {
+    bottom: 88px;
+    right: 16px;
+    left: 16px;
+    width: auto;
+    max-width: none;
+  }
+}
+
+/* Typing indicator */
+.fc-typing {
+  display: flex;
+  gap: 4px;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 12px 12px 12px 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  width: fit-content;
+}
+
+.fc-typing span {
+  width: 8px;
+  height: 8px;
+  background: #9ca3af;
+  border-radius: 50%;
+  animation: fc-typing-animation 1.4s infinite;
+}
+
+.fc-typing span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.fc-typing span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes fc-typing-animation {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-8px);
+  }
+}
+</style>
+
+<script>
+(function() {
+  // Chat state
+  let chatOpen = false;
+  
+  // DOM elements
+  const chatButton = document.getElementById('fc-chat-button');
+  const chatModal = document.getElementById('fc-chat-modal');
+  const chatClose = document.getElementById('fc-chat-close');
+  const chatInput = document.getElementById('fc-chat-input');
+  const chatSend = document.getElementById('fc-chat-send');
+  const chatMessages = document.getElementById('fc-chat-messages');
+  const quickActions = document.querySelectorAll('.fc-quick-btn');
+  
+  // Demo responses
+  const responses = {
+    'patronage': 'Your estimated 2024 patronage dividend is <strong>$3,250</strong> based on your current loan balance. This is part of our record <strong>$9.1M distribution</strong>! 💰',
+    'loan': 'Your loan application <strong>#AG2024-0157</strong> is currently in <strong>Underwriting Review</strong>. Expected decision within 5-7 business days. You\'ll receive email/SMS updates. 📋',
+    'agsunrise': '<strong>AgSunrise</strong> is our young & beginning farmer program! It includes:<br>• Reduced interest rates<br>• Flexible terms<br>• Mentorship matching<br>• Free financial education<br><br>Apply at <a href="agsunrise/index.html" style="color:#52812c">farmcreditsemo.com/agsunrise</a> 🌱',
+    'help': 'I can help with:<br>• Account questions<br>• Payment schedules<br>• Document uploads<br>• Contact info updates<br><br>Or call us at <strong>(877) 730-7327</strong> for immediate assistance. ❓',
+    'default': 'Thanks for your question! For specific account details, please call us at <strong>(877) 730-7327</strong> or email <strong>support@farmcreditsemo.com</strong>. Our team is ready to help! 😊'
+  };
+  
+  // Toggle chat
+  function toggleChat() {
+    chatOpen = !chatOpen;
+    chatModal.style.display = chatOpen ? 'flex' : 'none';
+    if (chatOpen) {
+      chatInput.focus();
+      // Hide quick actions after first open (keep it clean)
+      setTimeout(() => {
+        const quickActionsContainer = document.getElementById('fc-quick-actions');
+        if (quickActionsContainer && chatMessages.children.length > 1) {
+          quickActionsContainer.style.display = 'none';
+        }
+      }, 100);
+    }
+  }
+  
+  // Add message
+  function addMessage(text, isUser = false) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = isUser ? 'fc-chat-message-user' : 'fc-chat-message-bot';
+    
+    const time = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    
+    if (isUser) {
+      msgDiv.innerHTML = `
+        <div>${text}</div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:4px;padding-right:4px">${time}</div>
+      `;
+    } else {
+      msgDiv.innerHTML = `
+        <div style="background:white;padding:12px 16px;border-radius:12px 12px 12px 4px;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
+          <div style="font-size:14px;line-height:1.5">${text}</div>
+        </div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:4px;padding-left:4px">${time}</div>
+      `;
+    }
+    
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+  
+  // Show typing indicator
+  function showTyping() {
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'fc-chat-message-bot';
+    typingDiv.id = 'fc-typing-indicator';
+    typingDiv.innerHTML = '<div class="fc-typing"><span></span><span></span><span></span></div>';
+    chatMessages.appendChild(typingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+  
+  // Remove typing indicator
+  function hideTyping() {
+    const typingIndicator = document.getElementById('fc-typing-indicator');
+    if (typingIndicator) typingIndicator.remove();
+  }
+  
+  // Get response
+  function getResponse(message) {
+    const msg = message.toLowerCase();
+    
+    if (msg.includes('patronage') || msg.includes('dividend') || msg.includes('refund')) {
+      return responses.patronage;
+    } else if (msg.includes('loan') || msg.includes('application') || msg.includes('status')) {
+      return responses.loan;
+    } else if (msg.includes('agsunrise') || msg.includes('young farmer') || msg.includes('beginning')) {
+      return responses.agsunrise;
+    } else if (msg.includes('help') || msg.includes('support') || msg.includes('account')) {
+      return responses.help;
+    } else {
+      return responses.default;
+    }
+  }
+  
+  // Send message
+  function sendMessage() {
+    const message = chatInput.value.trim();
+    if (!message) return;
+    
+    // Add user message
+    addMessage(message, true);
+    chatInput.value = '';
+    
+    // Show typing
+    showTyping();
+    
+    // Simulate AI response delay
+    setTimeout(() => {
+      hideTyping();
+      const response = getResponse(message);
+      addMessage(response);
+    }, 800 + Math.random() * 400); // 800-1200ms delay
+  }
+  
+  // Event listeners
+  chatButton.addEventListener('click', toggleChat);
+  chatClose.addEventListener('click', toggleChat);
+  chatSend.addEventListener('click', sendMessage);
+  
+  chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+  
+  quickActions.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const message = btn.getAttribute('data-message');
+      chatInput.value = message;
+      sendMessage();
+    });
+  });
+  
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && chatOpen) {
+      toggleChat();
+    }
+  });
+  
+  // Close modal when clicking outside
+  chatModal.addEventListener('click', (e) => {
+    if (e.target === chatModal) {
+      toggleChat();
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

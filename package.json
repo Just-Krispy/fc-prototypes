@@ -1,0 +1,9 @@
+{
+  "name": "fc-prototypes",
+  "version": "1.0.0",
+  "description": "Farm Credit SEMO prototypes and demos",
+  "private": true,
+  "scripts": {
+    "dev": "echo \"Static HTML demos - open any demos/*/index.html in a browser\""
+  }
+}
