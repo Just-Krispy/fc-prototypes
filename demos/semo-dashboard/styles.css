@@ -65,9 +65,9 @@ body {
 }
 
 .logo-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 12px;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -76,10 +76,10 @@ body {
 }
 
 .logo-icon img {
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
     object-fit: cover;
-    border-radius: 12px;
+    border-radius: 50%;
 }
 
 .logo-text {
